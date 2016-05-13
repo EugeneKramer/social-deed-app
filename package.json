@@ -1,0 +1,24 @@
+{
+  "name": "social_deeds",
+  "version": "1.0.0",
+  "description": "an app for volunteering",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leslieo23/social_deeds.git"
+  },
+  "author": "Leslie,Shawn,Eugene,Dan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leslieo23/social_deeds/issues"
+  },
+  "homepage": "https://github.com/leslieo23/social_deeds#readme",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "mysql": "^2.10.2"
+  }
+}
