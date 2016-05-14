@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.marquee/1.3.1/jquery.marquee.min.js"></script>
+    <script src="http://rawgithub.com/tobia/Pause/master/jquery.pause.js"></script>
+
+</head>
+<body>
+<style>
+    .center{  text-align: center; }
+    li {  display: inline;  }
+
+    .marquee {
+        width: auto;
+        overflow: hidden;
+        border:1px solid #ccc;
+        background: black;
+        color: rgb(202, 255, 195);
+    }
+</style>
+<div class="container">
+    <h2 class="text-center">LeaderBoard</h2>
+    <p>The .table-striped class adds zebra-stripes to a table:</p>
+        <div class="marquee">
+            asdfffffffffffffffffffffffffffffffafasdfasf
+
+        </div>
+
+    <ul class="marquee">
+        <li><a href="default.asp">Home</a></li>
+        <li><a href="news.asp">News</a></li>
+        <li><a href="contact.asp">Contact</a></li>
+        <li><a href="about.asp">About</a></li>
+    </ul>
+
+    <table class="table table-striped table-condensed table-bordered">
+        <caption class="text-center text-lg">Top 50 Players</caption>
+        <thead>
+            <tr>
+                <th class="center">Rank</th>
+                <th class="center">Name</th>
+                <th class="center">Coin</th>
+                <th  class="center">Badges</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>Doe</td>
+            <td>john@example.com</td>
+            <td>Badge</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Moe</td>
+            <td>mary@example.com</td>
+            <td>Badge</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Dooley</td>
+            <td>july@example.com</td>
+            <td>Badge</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(function(){
+        $('.marquee').marquee({
+            pauseOnHover: true,
+            duration: 20000,
+            allowCss3Support: false
+        });
+    });
+
+</script>
+</body>
+</html>
