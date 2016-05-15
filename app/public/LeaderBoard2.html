@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leaderboards & Rankings - Social Deeds</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet"  href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
+
+</head>
+<body>
+<div class="container">
+    <!--TODO resize columns, Add tooltips/popovers-->
+    <table  id="example" class="display"> <!-- table table-striped table-condensed table-bordered-->
+        <caption class="text-center text-lg">Top 50 Players</caption>
+        <thead>
+            <th class="center">Rank</th>
+            <th class="center">Name</th>
+            <th class="center">Coin</th>
+            <th  class="center">Badges</th>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+</div>
+<script>
+    $(function() {
+
+        //TODO - serverside processing
+        $('#example').DataTable( {
+            //"processing": false,
+            //"serverSide": true,
+            "ajax": "leader"
+        });
+    });
+
+</script>
+</body>
+</html>
