@@ -5,6 +5,9 @@ var path= require('path');
 var $ = require('cheerio');
 var Sequelize = require('sequelize');
 
+var LIFO = require('./lifo.js');
+var Badge = require('./Badge');
+
 
 var app= express();
 var PORT= process.env.PORT||8080;
@@ -22,33 +25,6 @@ var sequelize = new Sequelize("mysql://ksy5pi6dqzh8gsxr:tl8d99w1bul0rfmr@tviw6wn
 
 //require('./app/routing/api-routes.js')(app);
 
-//TODO - move to serverside processing instead of clientside
-
-
-//TODO - validate that it's an image url, valid title
-function badgeStruct(badgeURL,badgeTitle){
-    "use strict";
-    this.badgeURL = badgeURL;
-    this.badgeTitle = badgeTitle;
-}
-
-function badgify2(badges){
-    "use strict";
-    if(badges == null) return null;
-
-    return $("<span/>").append(badges.map(function(badge, i){
-        return $("<img/>").attr({"src":badge.badgeURL,
-                                    "title": badge.badgeTitle,
-                                    "height":"25px",
-                                    "width":"25px"});
-    })).toString();
-}
-/*
-console.log(JSON.stringify([new badgeStruct("/images/poor.png","Poverty Crusher"),
-    new badgeStruct("/images/tree.png","Tree Hugger"),
-    new badgeStruct("/images/education.png","Education")]));
-*/
-
 app.get('/leader',function(req,res){
     /*http://stackoverflow.com/questions/3333665/rank-function-in-mysql*/
     /*http://dba.stackexchange.com/questions/13703/get-the-rank-of-a-user-in-a-score-table*/
@@ -63,12 +39,28 @@ app.get('/leader',function(req,res){
             res.json({"data":
                 rows.map(function(row, i){
                     "use strict";
+
                     return [row.rank,
                             row.name,
                             row.coins,
-                            badgify2(JSON.parse(row.badges))]; })
+                            Badge.createBadgeHTML(JSON.parse(row.badges))]; })
             });
         });
+});
+
+
+
+
+
+
+var lifo = new LIFO(5);
+lifo.add(new Badge.badgeStruct("/images/tree.png","Tree Hugger","Help Environment"));
+lifo.add(new Badge.badgeStruct("/images/poor.png","Poverty Crusher","Crush Poverty"));
+
+
+app.get("/awards", function(req, res){
+    "use strict";
+    return res.json(lifo.getElements());
 });
 
 app.use(function(req,res){
@@ -77,6 +69,5 @@ app.use(function(req,res){
 })
 
 app.listen(PORT, function() {
-	console.log("App listening on PORT: " + PORT);
+    console.log("App listening on PORT: " + PORT);
 });
-
