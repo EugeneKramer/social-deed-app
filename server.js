@@ -50,9 +50,6 @@ app.get('/leader',function(req,res){
 
 
 
-
-
-
 var lifo = new LIFO(5);
 lifo.add(new Badge.badgeStruct("/images/tree.png","Tree Hugger","Help Environment"));
 lifo.add(new Badge.badgeStruct("/images/poor.png","Poverty Crusher","Crush Poverty"));
@@ -62,6 +59,8 @@ app.get("/awards", function(req, res){
     "use strict";
     return res.json(lifo.getElements());
 });
+
+
 
 app.use(function(req,res){
     "use strict";

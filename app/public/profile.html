@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js" integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+
+    <!-- App Icon Image -->
+    <link rel="apple-touch-icon" href="assets/images/icon.jpg">
+    <!-- Allows application to become a mobile app -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Stops user from being able to double-tap zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Paytone+One' rel='stylesheet' type='text/css'>
+    <!-- Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+    <!-- Bootswatch -->
+    <link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="description" content="Social Deeds"/>
+    <meta charset="UTF-8"> 
+
+    <link type="text/css" rel="stylesheet" href="profilestyle.css">
+    <link href='http://fonts.googleapis.com/css?family=Rokkitt:400,700|Lato:400,300' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="http://www.reactionface.info/sites/default/files/images/1287666826226.png">
+    <link rel="icon" href="http://www.reactionface.info/sites/default/files/images/1287666826226.png">
+    <title>My Profile</title>
+
+</head>
+<body>
+<!--NAV BAR-->
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Social Deeds</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="leaderBoards"><a href="#">Leaderboards <span class="sr-only">(current)</span></a></li>
+        <li class="deeds"><a href="#">Deeds<span class="sr-only">(current)</span></a></li>
+     </ul>
+           <ul class="nav navbar-nav navbar-right">
+        <li><a href="#" id="myProfile" data-toggle='modal' class="active"> My Profile</a></li>
+        <li><a href="#" id="loginButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
+        <li><a href="#" id="logOutButton" data-toggle="modal" data-target="#loginOutSecton">Log Out</a></li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id="logOutSection" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" align="center">Log-Out</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="focusedInput">Are you sure you want to logout?</label>
+              </div>
+          </div>
+       </div>
+  </div>
+</div>
+
+<div id="cv" class="instaFade">
+  <div class="mainDetails">
+    <div id="headshot" class="quickFade">
+      <img src="profile.jpg"/>
+    </div>
+    
+    <div id="name">
+      <h1 class="quickFade delayTwo">dan_weierich</h1>
+      <h2 class="quickFade delayThree">Estimator</h2>
+    </div>
+    
+    <div id="contactDetails" class="quickFade delayFour">
+      <ul>
+        <li>contact: 908 123 4567</li>
+        <li>email: dan.weierich@gmail.com</li>
+      </ul>
+    </div>
+    <div class="clear"></div>
+  </div>
+  
+  <div id="mainArea" class="quickFade delayFive">
+    <section>
+      <article>
+        <div class="sectionTitle">
+          <h1>About Me</h1>
+        </div>
+        
+        <div class="sectionContent">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer dolor metus, interdum at scelerisque in, porta at lacus. Maecenas dapibus luctus cursus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ultricies massa et erat luctus hendrerit. Curabitur non consequat enim. Vestibulum bibendum mattis dignissim. Proin id sapien quis libero interdum porttitor.</p>
+        </div>
+      </article>
+      <div class="clear"></div>
+    </section>
+
+     <section>
+      <div class="sectionTitle">
+        <h1>Deed Coin Points</h1>
+      </div>
+      
+      <div class="sectionContent">
+        <article>
+          
+          <p>540</p>
+        </article>
+        
+        
+      </div>
+      <div class="clear"></div>
+    </section>
+    
+    <section>
+      <div class="sectionTitle">
+        <h1>Badges</h1>
+      </div>
+      
+      <div class="sectionContent">
+        <article>
+          
+          <p><img src="profile.jpg" height="30" width="30">   <img src="profile.jpg" height="30" width="30">   <img src="profile.jpg" height="30" width="30">   <img src="profile.jpg" height="30" width="30">   <img src="profile.jpg" height="30" width="30">   <img src="profile.jpg" height="30" width="30"></p>
+        </article>
+        
+        
+      </div>
+      <div class="clear"></div>
+    </section>
+    
+      
+    
+    <section>
+      <div class="sectionTitle">
+        <h1>Skillset</h1>
+      </div>
+      
+      <div class="sectionContent">
+        <ul class="keySkills">
+          <li></li>
+          <li>Home Re-modeling</li>
+          <li>Environmental Cleanup</li>
+          <li>Toys for Tots</li>
+          <li>Food Donation</li>
+          <li>Animal Care</li>
+        </ul>
+      </div>
+      <div class="clear"></div>
+    </section>
+    
+    
+  
+    
+  </div>
+</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3753241-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+</body>
+<script type=text/javascript>
+  $(window).load(function(){
+    console.log('window has been loaded')
+    
+
+  })
+  $("#myProfile").click(function(){
+      $('#loginButton').hide()
+
+  });
+
+  $('#logOutButton').click(function(){
+    $('#loginButton').show();
+  });
+</script>
+
+</html>

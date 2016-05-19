@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+   <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js" integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+
+    <!-- App Icon Image -->
+    <link rel="apple-touch-icon" href="assets/images/icon.jpg">
+    <!-- Allows application to become a mobile app -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Stops user from being able to double-tap zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Paytone+One' rel='stylesheet' type='text/css'>
+    <!-- Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+    <!-- Bootswatch -->
+    <link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width"/>
+    
+    <meta charset="UTF-8"> 
+
+    <link type="text/css" rel="stylesheet" href="style.css">
+    <link href='http://fonts.googleapis.com/css?family=Rokkitt:400,700|Lato:400,300' rel='stylesheet' type='text/css'>
+
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html">
+  <title>Social Deeds Profile Form</title>
+  
+  <link rel="shortcut icon" href="http://www.reactionface.info/sites/default/files/images/1287666826226.png">
+  <link rel="icon" href="http://www.reactionface.info/sites/default/files/images/1287666826226.png">
+  <link rel="stylesheet" type="text/css" media="all" href="css/styles.css">
+  <link rel="stylesheet" type="text/css" media="all" href="css/switchery.min.css">
+  <script type="text/javascript" src="js/switchery.min.js"></script>
+  <script type="text/javascript" src="js/form.js"></script>
+</head>
+
+<body>
+<!--NAV BAR-->
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Social Deeds</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="leaderBoards"><a href="#">Leaderboards <span class="sr-only">(current)</span></a></li>
+        <li class="deeds"><a href="#">Deeds<span class="sr-only">(current)</span></a></li>
+     </ul>
+           <ul class="nav navbar-nav navbar-right">
+        <li><a href="#" id="myProfile" data-toggle='modal' class="active"> My Profile</a></li>
+        <li><a href="#" id="loginButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
+        <li><a href="#" id="logOutButton" data-toggle="modal" data-target="#loginOutSecton">Log Out</a></li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id="logOutSection" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" align="center">Log-Out</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="focusedInput">Are you sure you want to logout?</label>
+              </div>
+          </div>
+       </div>
+  </div>
+</div>
+  <div id="wrapper">
+  
+  <h1>Social Deeds Profile Registration</h1>
+  
+  <form id="comment_form">
+  <div class="col-2">
+    <label>
+      Name
+      <input placeholder="make a username" id="name" name="name" tabindex="1">
+    </label>
+  </div>
+  <div class="col-2">
+    <label>
+      Company
+      <input placeholder="current occupation" id="company" name="company" tabindex="2">
+    </label>
+  </div>
+  
+  <div class="col-3">
+    <label>
+      Phone Number
+      <input placeholder="your cell" id="phone" name="phone" tabindex="3">
+    </label>
+  </div>
+  <div class="col-3">
+    <label>
+      Email
+      <input placeholder="e-mail address?" id="email" name="email" tabindex="4">
+    </label>
+  </div>
+  <div class="col-3">
+    <label>
+      Availability
+      <select tabindex="5">
+        <option>5-15 hrs per week</option>
+        <option>15-30 hrs per week</option>
+        <option>30-40 hrs per week</option>
+      </select>
+    </label>
+  </div>
+    <div class="col-4">
+    <label>
+      Interests 
+      <input placeholder="preferred social activities" id="experience" name="experience" tabindex="7">
+    </label>
+  </div>
+  <div class="col-4">
+    <label>
+      About Me
+      <input placeholder="write something interesting" id="experience" name="experience" tabindex="7">
+    </label>
+  </div>
+  <div class="col-4">
+    <label>confirm you are human</label>
+    <center style="position:relative; margin-bottom:8px;"><input type="checkbox" class="js-switch"></center>
+  </div>
+  <div class="col-submit">
+    <button class="submitbtn">Submit Form</button>
+  </div>
+  
+  </form>
+  </div>
+<script type="text/javascript">
+//var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+//elems.forEach(function(html) {
+//  var switchery = new Switchery(html);
+//});
+</script>
+</body>
+</html>

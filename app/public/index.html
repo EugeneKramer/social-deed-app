@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js" integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" crossorigin="anonymous"></script>
+    <!-- HTML Magic -->    <meta charset="UTF-8">
+
+    <!-- App Icon Image -->
+    <link rel="apple-touch-icon" href="assets/images/icon.jpg">
+    <!-- Allows application to become a mobile app -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Stops user from being able to double-tap zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Paytone+One' rel='stylesheet' type='text/css'>
+    <!-- Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+    <!-- Bootswatch -->
+    <link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">
+    <link rel="stylesheet" href="/Users/Leslie/social_deeds/app/public/index.css" type="text/css">
+    <title>Social Deeds</title>
+
+</head>
+<body>
+<!--NAV BAR-->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Social Deeds</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Leaderboards <span class="sr-only">(current)</span></a></li>
+                <li id="deeds"><a href="#">Deeds <span class="sr-only">(current)</span></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <!--<li><a href="#" id="myProfile" data-toggle='modal'> My Profile</a></li>-->
+                <li><a href="#" id="loginForm" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
+                <li><a href="register.html" id="registerForm" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
+                <!--<li><a href="#" id="registerForm" data-toggle="modal" data-target="#loginSecton">Register</a></li>-->
+                <!--<li><a href="#" id="loginOutButton" data-toggle="modal" data-target="#loginOutSecton">Log Out</a></li>-->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1 align="center" id="home">Social Deeds</h1>
+
+</div>
+<br>
+<br>
+<br>
+<div id="welcomeCenter" align="center">
+    <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="createButton" data-toggle="modal" data-target="">Create-A-Deed</a>
+    <br>
+    <br>
+    <!--   <a href="#" class="btn btn-primary btn-lg btn-lg" id="findButton" data-toggle="modal" data-target="#findSection">Do-A-Deed</a>-->
+    <br>
+    <br>
+
+</div>
+
+<!--LOG IN FORM-->
+<div id="loginSection" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" align="center">Log-In</h4>
+                <button type="button" class="close modal-title" class="btn btn-default" align="left" data-dismiss="modal">X</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="focusedInput">E-mail</label>
+                    <div class="infoOneLine">
+                        <div class="oneLine" style="margin-left:0;">
+                            <input class="form-control" id="focusedInput" type="email" required value="" placeholder="John.Doe@gmail.com">
+                        </div>
+                        <br>
+                        <div class="oneLine">
+                            <label class="control-label" for="focusedInput">Password:</label>
+                            <input class="form-control" id="focusedInput" type="password" required value="" placeholder="Password">
+                            <br>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" formnovalidate="" id="enterLogin" class="btn btn-default" align="right">Enter</button>
+                            <button type="submit"  id="signUp" class="btn btn-default" align="left">Sign-Up</button>
+                            <br>
+                            <br>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!--SIGN UP FORM-->
+<div id="signUp-form" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" align="center">Sign-Up</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="focusedInput">E-mail</label>
+                    <div class="infoOneLine">
+                        <div class="oneLine" style="margin-left:0;">
+                            <input class="form-control" id="focusedInput" type="email" value="" placeholder="John.Doe@gmail.com">
+                        </div>
+                        <br>
+
+                        <div class="oneLine">
+                            <label class="control-label" for="focusedInput">Username:</label>
+                            <input class="form-control" id="focusedInput" type="text" value="" placeholder="username">
+                            <br>
+                        </div>
+                        <div class="oneLine">
+                            <label class="control-label" for="focusedInput">Password:</label>
+                            <input class="form-control" id="focusedInput" type="password" value="" placeholder="Password">
+                            <br>
+                        </div>
+                        <div class="oneLine">
+                            <label class="control-label" for="focusedInput">Select An Image For Your Profile:</label><br>
+                            <form action="demo_form.asp">
+                                <input type="file" name="pic" accept="image/*">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="enterLogin" class="btn btn-default" align="right">Enter</button>
+                            <br>
+                            <br>
+                            <button type="button" class="close" class="btn btn-default" align="center" data-dismiss="modal">X</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!--CREATE A DEED FORM-->
+
+<div id="createSection" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" align="center">Create-A-Deed</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <!-- <div class="addEventForm"> -->
+                    <label class="control-label animated fadeInDown" for="focusedInput">Deed Info:</label>
+                    <div class="infoOneLine">
+                        <div class="oneLine" style="margin-left: 0;">
+                            <input class="form-control eventName animated fadeInDown" id="focusedInput" type="text" value="" placeholder="Event Name" required>
+                        </div>
+                        <br>
+                        <div class="oneLine">
+                            <label class="control-label animated fadeInDown" for="focusedInput">Date:</label>
+                            <input class="form-control eventDate animated fadeInDown" id="focusedInput" type="date" value="" placeholder="Date" required>
+                        </div>
+                        <br>
+                        <div class="oneLine">
+                            <label class="control-label animated fadeInDown" for="focusedInput">Time:</label>
+                            <input class="form-control eventTime animated fadeInDown" id="focusedInput" type="time" value="" placeholder="Time" required>
+                        </div>
+                        <br>
+                        <div class="oneLine">
+                            <label class="control-label" for =focusedInput>Location:</label>
+                            <input class="form-control locationDescription" id="focusedInput" type="text" value="" placeholder="Location" required>
+                        </div>
+                    </div>
+                </div>
+                <div id="others">
+                    <!-- <label class="control-label" for="focusedInput">What Skillsets do you possess?</label><br>
+                  <input  id="check" type="checkbox" name="skills" value="skillset1"> IT<br>
+                  <input  id="check" type="checkbox" name="skills" value="skillset2"> Art<br>
+                  <input  id="check" type="checkbox" name="skills" value="skillset3">Management<br>-->
+                    <input  id="option"type="checkbox" name="skills" value="skillset3"> Other<br>
+                    <label  id="other"for="focusedInput">Other:</label>
+                    <input type="text" class="form-control" id="other1">
+                </div>
+                <br>
+                <div class="oneLine">
+                    <label class="control-label" for="focusedInput">Deed Description:</label>
+                    <textarea class="form-control locationDescription" id="focusedInput" type="text" value="" placeholder="Description"></textarea>
+                </div>
+                <br>
+                <div class="oneLine">
+                    <label class="control-label" for="focusedInput">Select An Image for you Event</label><br>
+                    <form action="demo_form.asp">
+                        <input type="file" name="pic" accept="image/*">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" formnovalidate="" id="addEvent" class="btn btn-default animated bounce" align="center">Add-A-Deed</button>
+                    <br>
+                    <br>
+                    <button type="button" class="close" class="btn btn-default" data-dismiss="modal">X</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+
+    $("#loginForm").click(function() {
+        $("#loginSection").modal('show');
+    });
+    $("#registerForm").click(function(){
+        $('#loginSection').modal('hide');
+        $('#signUp-form').modal('show');
+    })
+    $('#homeButton').click(function(){
+        ('#welcomeCenter').show();
+    });
+    $('#createButton').click(function(){
+        $("#createSection").modal('show');
+        $('#other').hide();
+        $('#other1').hide();
+    })
+    $('#other1').keypress(function(e){
+        if(e.keyCode==13){
+            console.log("Enter Key was pressed!")
+        }
+    })
+    $('#option').click(function(){
+        $('#other').show();
+        $('#other1').show();
+    })
+</script>
+</html>
