@@ -4,6 +4,8 @@ var bodyParser= require('body-parser');
 var path= require('path');
 var $ = require('cheerio');
 var Sequelize = require('sequelize');
+var crypto = require('crypto'),shasum = crypto.createHash('sha1');//TODO- chagne Sha1 is broken
+var salt = "Project 15";
 
 var LIFO = require('./lifo.js');
 var Badge = require('./Badge');
@@ -23,7 +25,7 @@ app.use(bodyParser.json({type:'application/vnd.api+json'}));
 
 var sequelize = new Sequelize("mysql://ksy5pi6dqzh8gsxr:tl8d99w1bul0rfmr@tviw6wn55xwxejwj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/pt38d7p8sxy79lyx");
 
-//require('./app/routing/api-routes.js')(app);
+require('./app/routing/api-routes.js')(app, sequelize);
 
 app.get('/leader',function(req,res){
     /*http://stackoverflow.com/questions/3333665/rank-function-in-mysql*/
@@ -48,6 +50,29 @@ app.get('/leader',function(req,res){
         });
 });
 
+app.get('/leader10',function(req,res){
+    /*http://stackoverflow.com/questions/3333665/rank-function-in-mysql*/
+    /*http://dba.stackexchange.com/questions/13703/get-the-rank-of-a-user-in-a-score-table*/
+    sequelize.query("SELECT name," +
+            "coins," +
+            "badges," +
+            "@curRank := @curRank + 1 AS rank " +
+            "FROM ranking p, (SELECT @curRank := 0) r " +
+            "ORDER BY coins;", { type: sequelize.QueryTypes.SELECT})
+        .then(function(rows) {
+            res.json(
+                rows.map(function(row, i){
+                    return {"rank": row.rank,
+                            name: row.name,
+                            score: row.coins}
+                })
+            );
+        });
+});
+function hashedPass(pass){
+    "use strict";
+    return shasum.update(salt + "foo").digest("hex");
+}
 
 
 var lifo = new LIFO(5);
@@ -65,7 +90,7 @@ app.get("/awards", function(req, res){
 app.use(function(req,res){
     "use strict";
     res.redirect("LeaderBoard2.html");
-})
+});
 
 app.listen(PORT, function() {
     console.log("App listening on PORT: " + PORT);

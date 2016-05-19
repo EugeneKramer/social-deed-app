@@ -23,6 +23,30 @@
     <title>Social Deeds</title>
 
 </head>
+<script>
+    $(function(){
+
+        $("#submitLogin").on("click",function(e){
+            if(!$("#loginForm")[0].checkValidity()) return;
+            e.preventDefault();
+            $("#loginFormStatus").text("Logging in.");
+
+            $.post("/login",$("#loginForm").serialize())
+                    .done(function(data){
+                        if(data.loggedin){
+                            //update form with cookies
+                            $("#loginFormStatus").text("Login successful. " + data.message);
+                        }
+                        else{
+                            $("#loginFormStatus").text("Login failed. " + data.message);
+                        }
+                    })
+                    .fail(function(data){
+                        $("#loginFormStatus").text("There was a network error. Please try again.");
+                    })
+        });
+    });
+</script>
 <body>
 <!--NAV BAR-->
 <nav class="navbar navbar-default">
@@ -30,44 +54,58 @@
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Social Deeds</a>
+            <a class="navbar-brand" href="index2.html">Social Deeds</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Leaderboards <span class="sr-only">(current)</span></a></li>
-                <li id="deeds"><a href="#">Deeds <span class="sr-only">(current)</span></a></li>
+                <li class="active"><a href="#">Leaderboards</a></li><!--<span class="sr-only">(current)</span>-->
+                <li id="deeds"><a href="#">Deeds </a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <!--<li><a href="#" id="myProfile" data-toggle='modal'> My Profile</a></li>-->
-                <li><a href="#" id="loginForm" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
-                <li><a href="register.html" id="registerForm" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
-                <!--<li><a href="#" id="registerForm" data-toggle="modal" data-target="#loginSecton">Register</a></li>-->
-                <!--<li><a href="#" id="loginOutButton" data-toggle="modal" data-target="#loginOutSecton">Log Out</a></li>-->
+                <li><a href="#login" id="loginFormButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
+                <li><a href="#register" id="registerFormButton" data-toggle="modal" data-target="#loginSecton">Register</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
 <div class="container">
-    <h1 align="center" id="home">Social Deeds</h1>
+    <div class="row">
+        <div class="jumbotron">
+            <h1 class="text-center page-header">Social Deeds</h1>
+            <p><b>Volunteering made social. </b>Compete with local volunteers to bring about change! Earn DeedCoins and gain the respect of your peers, all while supporting your local community!</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-center col-sm-6 ">
+            <h3>Improve the community</h3>
+            <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="createButton" data-toggle="modal" data-target="">Create-A-Deed</a>
 
-</div>
-<br>
-<br>
-<br>
-<div id="welcomeCenter" align="center">
-    <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="createButton" data-toggle="modal" data-target="">Create-A-Deed</a>
-    <br>
-    <br>
-    <!--   <a href="#" class="btn btn-primary btn-lg btn-lg" id="findButton" data-toggle="modal" data-target="#findSection">Do-A-Deed</a>-->
-    <br>
-    <br>
+        </div>
+        <div class="text-center col-sm-6 ">
+            <h3>Get Involved!</h3>
+            <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="createButton" data-toggle="modal" data-target="">Do-A-Deed</a>
 
+        </div>
+        <div class="row">
+            <div class="text-center col-sm-6 ">
+                <table id="top10NewDeeds" class="table-striped table-condensed"><caption><h3>New Deeds</h3></caption></table>
+            </div>
+            <div class="text-center col-sm-6 ">
+                <table id="top10Players" class="table-striped table-condensed text-center" style="font-size:18px; margin:0 auto;">
+                    <caption><h3>Top Volunteers</h3></caption>
+                    <thead>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>DeedCoins</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!--LOG IN FORM-->
@@ -75,45 +113,83 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" align="center">Log-In</h4>
                 <button type="button" class="close modal-title" class="btn btn-default" align="left" data-dismiss="modal">X</button>
+                <h4 class="modal-title" align="center">Log-In</h4>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="control-label" for="focusedInput">E-mail</label>
-                    <div class="infoOneLine">
-                        <div class="oneLine" style="margin-left:0;">
-                            <input class="form-control" id="focusedInput" type="email" required value="" placeholder="John.Doe@gmail.com">
-                        </div>
-                        <br>
-                        <div class="oneLine">
-                            <label class="control-label" for="focusedInput">Password:</label>
-                            <input class="form-control" id="focusedInput" type="password" required value="" placeholder="Password">
+                <form id="loginForm" action="login" method="POST">
+                    <div class="form-group">
+                        <div class="infoOneLine">
+                            <div class="oneLine" style="margin-left:0;">
+                                <label class="control-label" for="email">Email:</label>
+                                <input class="form-control" name="email" id="email" type="email" required="true" value="" placeholder="John.Doe@gmail.com">
+                            </div>
                             <br>
-                        </div>
+                            <div class="oneLine">
+                                <label class="control-label" for="password">Password:</label>
+                                <input class="form-control" name="password" id="password" type="password" required="true" value="" placeholder="Password">
+                                <br>
+                            </div>
 
-                        <div class="modal-footer">
-                            <button type="submit" formnovalidate="" id="enterLogin" class="btn btn-default" align="right">Enter</button>
-                            <button type="submit"  id="signUp" class="btn btn-default" align="left">Sign-Up</button>
-                            <br>
-                            <br>
-
+                            <div class="modal-footer">
+                                <span id="loginFormStatus"></span>
+                                <button type="submit" id="submitLogin" class="btn btn-default" align="right">Submit</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<div id="registerSection" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close modal-title" class="btn btn-default" align="left" data-dismiss="modal">X</button>
+                <h4 class="modal-title text-center">Register</h4>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm" action="login" method="POST">
+                    <div class="form-group">
+                        <div class="oneLine" style="margin-left:0;">
+                            <label class="control-label" for="user">Email:</label>
+                            <input class="form-control" name="user" id="user" type="user" required="true" value="" placeholder="John Doe">
+                        </div>
+                        <div class="infoOneLine">
+                            <div class="oneLine" style="margin-left:0;">
+                                <label class="control-label" for="email">Email:</label>
+                                <input class="form-control" name="email" id="email" type="email" required="true" value="" placeholder="John.Doe@gmail.com">
+                            </div>
+                            <br>
+                            <div class="oneLine">
+                                <label class="control-label" for="password">Password:</label>
+                                <input class="form-control" name="password" id="password" type="password" required="true" value="" placeholder="Password">
+                                <br>
+                            </div>
+
+                            <div class="modal-footer">
+                                <span id="loginFormStatus"></span>
+                                <button type="submit" id="submitLogin" class="btn btn-default" align="right">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
 <!--SIGN UP FORM-->
-<div id="signUp-form" class="modal fade" role="dialog">
+<div id="signUp-form2" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" align="center">Sign-Up</h4>
             </div>
             <div class="modal-body">
+                </div>
                 <div class="form-group">
                     <label class="control-label" for="focusedInput">E-mail</label>
                     <div class="infoOneLine">
@@ -216,14 +292,24 @@
     </div>
 </body>
 <script type="text/javascript">
-
-    $("#loginForm").click(function() {
-        $("#loginSection").modal('show');
+    $(function(){
+        $.get("/leader10")
+                .done(function(data) {
+                    $("#top10Players").append(data.map(function (player, i) {
+                        console.log(player);
+                        return $("<tr/>").append($("<td/>").text(player.rank))
+                                .append($("<td/>").text(player.name))
+                                .append($("<td/>").text(player.score))
+                    }));
+                });
     });
-    $("#registerForm").click(function(){
-        $('#loginSection').modal('hide');
+
+    $("#loginFormButton").on("click",()=>{ $("#loginSection").modal('show'); });
+
+
+    $("#registerFormButton").click(function(){
         $('#signUp-form').modal('show');
-    })
+    });
     $('#homeButton').click(function(){
         ('#welcomeCenter').show();
     });

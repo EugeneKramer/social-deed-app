@@ -21,8 +21,7 @@ $(function(){
         .fail(function() {
             console.log( "error" );
         });
-
-
+    
     function createBadgeHTML(badges){
         "use strict";
         if(badges == null) return null;
