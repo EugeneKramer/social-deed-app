@@ -14,41 +14,44 @@
     <link href='https://fonts.googleapis.com/css?family=Paytone+One' rel='stylesheet' type='text/css'>
     <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
     <!-- Bootswatch -->
     <link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">
+    <link href="http://datatables.net/download/build/nightly/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="./index.css">
+    <script src="http://datatables.net/download/build/nightly/jquery.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
     <title>Social Deeds</title>
-
+  
 </head>
 <body>
 <!--NAV BAR-->
-<nav class="navbar navbar-de fault">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Social Deeds</a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Leaderboards <span class="sr-only">(current)</span></a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" id="myProfile" data-toggle='modal'> My Profile</a></li>
-                <li><a href="#" id="loginButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
-                <li><a href="#" id="loginOutButton" data-toggle="modal" data-target="#loginOutSecton">Log Out</a></li>
-            </ul>
-        </div>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Social Deeds</a>
     </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Leaderboards <span class="sr-only">(current)</span></a></li>
+     </ul>
+           <ul class="nav navbar-nav navbar-right">
+        <li><a href="#" id="myProfile" data-toggle='modal'> My Profile</a></li>
+        <li><a href="#" id="loginButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
+        <li><a href="#" id="loginOutButton" data-toggle="modal" data-target="#loginOutSecton">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
 </nav>
 
-<div class="title" align="center">
-    <h1>THIS IS THE DEEDS PAGE</h1>
+<div class="page-header">
+    <h1>Let your Deeds Be Like Rain<small>  Drop a little everywhere.</small></h1>
 </div>
 
 <div id="loginSection" class="modal fade" role="dialog">
@@ -63,22 +66,23 @@
                     <div class="infoOneLine">
                         <div class="oneLine" style="margin-left:0;">
                             <input class="form-control" id="focusedInput" type="email" value="" placeholder="John.Doe@gmail.com">
-                        </div>
-                        <br>
+                            </div>
+                            <br>
                         <div class="oneLine">
                             <label class="control-label" for="focusedInput">Password:</label>
                             <input class="form-control" id="focusedInput" type="password" value="" placeholder="Password">
                             <br>
                         </div>
-
+                       
                         <div class="modal-footer">
-                            <button type="submit" id="enterLogin" class="btn btn-default" align="right">Enter</button>
-
-
-                            <button type="submit" id="signUp" class="btn btn-default" align="left">Sign-Up</button>
-                            <br>
-                            <br>
-                            <button type="button" class="close" class="btn btn-default" align="center" data-dismiss="modal">Close</button>
+                    <button type="submit" id="enterLogin" class="btn btn-default" align="right">Enter</button>
+                    
+                    
+                    <button type="submit" id="signUp" class="btn btn-default" align="left">Sign-Up</button>
+                    <br>
+                    <br>
+                    <button type="button" class="close" class="btn btn-default" align="center" data-dismiss="modal">Close</button>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -86,16 +90,197 @@
         </div>
     </div>
 </div>
-</div>
+
+    <br>
+    <br>
+    <br>
+    <div class="container">
+        <table id="deeds" class="display" width="100%">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Slots</th>
+                <th>Sponsored By</th>
+                <th>Sponsor Logo</th>
+                <th>Deed Coins</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
 </body>
 <script type=text/javascript>
+// login
     $("#loginButton").click(function() {
 
         $("#loginSection").modal('show');
     });
+// sign up
     $("#signUp").click(function(){
         $('#loginSection').modal('hide');
         $('#signUp-form').modal('show');
-    })
+    });
+// jQuery AJAX call to database. Links to a  Sequelize implementation for retrieving results.
+
+
+    var currentURL = window.location.origin;
+
+
+
+  $('add_deed').on('click', function(){
+      var newDeed =
+      {
+          title: $("#deed_title").val().trim(),
+          location: $("#deed_location").val().trim(),
+          date_start: $("#deed_date_start").val().trim(),
+          date_end: $("#deed_date_end").val().trim(),
+          description: $("#deed_description").val().trim(),
+          image: $("#deed_image").val().trim(),
+          slots: $("#deed_slots").val().trim(),
+          sponsor: $("#deed_sponsor").val().trim(),
+          sponsor_img: $("#deed_sponsor_image").val().trim(),
+          deed_coin_val: $("#deed_coins").val().trim(),
+      }
+      $.post(currentURL + "api/deeds/new", newDeed)
+          .done(function(data){
+              console.log(data);
+              alert("Adding your event to the List of Opportunities...");
+          })
+      $("#deed_title").val("");
+      $("#deed_location").val("");
+      $("#deed_date_start").val("");
+      $("#deed_date_end").val("");
+      $("#deed_description").val("");
+      $("#deed_image").val("");
+      $("#deed_slots").val("");
+      $("#deed_sponsor").val("");
+      $("#deed_sponsor_image").val("");
+      $("#deed_coins").val("");
+
+      return false;
+
+  });
+
+
+////Data Table Functionality, ie. collapsible rows
+    $.get(currentURL + '/deeds', function(data){
+        console.log(data);
+            $('#deeds').DataTable({
+                "data": data,
+                "columns": [
+                    {"data": "id"},
+                    {"data": "title"},
+                    {"data": "location"},
+                    {"data": "date_start"},
+                    {"data": "date_end"},
+                    {"data": "description"},
+                    {"data": "image"},
+                    {"data": "slots"},
+                    {"data": "sponsor"},
+                    {"data": "sponsor_img"},
+                    {"data": "deed_coin_val"}
+                ],
+                "columnDefs": [
+                    {
+                        "targets":3,
+                        "searchable": false,
+                        "visible": false
+                    },
+                    {
+                        "targets":4,
+                        "searchable": false,
+                        "visible": false
+                    },
+                    {
+                        "targets":5,
+                        "searchable": false,
+                        "visible": false
+                    },
+                    {
+                        "targets":6,
+                        "searchable": false,
+                        "visible": false
+                    },
+                    {
+                        "targets":7,
+                        "searchable": false,
+                        "visible": false
+                    },
+                    {
+                        "targets":8,
+                        "searchable": false,
+                        "visible": false
+                    },
+                    {
+                        "targets":9,
+                        "searchable": false,
+                        "visible": false
+                    },
+                ]
+            });
+
+        $('#deeds tbody').on('click', 'tr', function () {
+            var table = $('#deeds').DataTable();
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            var detailWell = '<div class="well well-lg">details well</div>';
+            console.log(row.data().title);
+           //alert("you clicked the " + row.data().title + " row");
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                //row.child(row.data()).show();
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+        function format ( d ) {
+            // `d` is the original data object for the row
+            return '<div class="well well-lg">'+
+                    '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+                    '<tr>'+
+                    '<td>Description:</td>'+
+                    '<td>'+d.description+'</td>'+
+                    '<td>Deed Point Value</td>'+
+                    '<td>'+d.deed_coin_val+'</td>'+
+                    '</tr>'+
+                    '<tr>' +
+                    '<td>'+'Start Date'+'</td>'+
+                    '<td>'+moment(d.date_start).format('LL')+'</td>' +
+                    '</tr>'+
+                    '<tr>' +
+                    '<td>'+'End Date'+'</td>'+
+                    '<td>'+moment(d.date_end).format('LL')+'</td>' +
+                    '</tr>'+
+                    '<tr>'+
+                    '<td>Sponsors:</td>'+
+                    '<td>'+ d.sponsor +'</td>'+
+                    '</tr>'+
+                    '</table>'+
+                    '</div>';
+        }
+        $( this ).closest( 'tr' ).nextUntil('.even, .odd').filter('.grand-child-row').hide();
+
+
+         //dd event listener for opening and closing child details
+        $('#deeds tbody').on('click', 'td.child-details-control', function () {
+            alert("listener for tbody click");
+            $(this).closest( 'tr' ).toggleClass("child-shown");
+            $(this).closest( 'tr' ).nextUntil('.child-row, .even, .odd').toggle();
+        });
+});
+
+
+
 </script>
 </html>

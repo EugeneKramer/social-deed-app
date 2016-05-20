@@ -5,6 +5,8 @@
 var Sequelize =require('sequelize');
 var createHash = require('sha.js');
 var crypto = require('crypto'),shasum = crypto.createHash('sha1');//TODO- chagne Sha1 is broken
+var Deeds = require("../model/deeds.js");
+
 
 var salt = "Project 15";
 
@@ -40,65 +42,63 @@ module.exports = function(app, sequelize){
             });
     });
 
-/*
-    var Users = sequelize.define("users", {
-        id: { type: Sequelize.INTEGER,
-            autoIncrement: true,
-            primaryKey: true},
-        name: { type: Sequelize.STRING},
-        password: { type: Sequelize.STRING},
-        email: { type: Sequelize.STRING}
-    });
-
-// Sync with DB
-    Users.sync();*/
-
     app.post("/register", function(req, res){
 
+        req.body.abc="go";
         if((!req.body.password) || (!req.body.email)) return;
 
-        
-
-
-
-        sequelize.query("SELECT name " +
-                "FROM users " +
-                "WHERE password = ? AND email = ?;",  { replacements: [hashedPass(req.body.password),req.body.email], type: sequelize.QueryTypes.SELECT})
-            .then(function(rows) {
+        sequelize.query("select name " +
+            "FROM users " +
+            "WHERE email = ? ",{replacements:[req.body.email], type: sequelize.QueryTypes.SELECT})
+            .then(function(rows){
                 console.log(rows);
-                if(rows.length == 0)
-                    res.json({loggedin:false, message:'Invalid email or password.'});
+                if(rows.length != 0)
+                    res.json({registered:false, message:'That email is already registered.'});
                 else{
-                    res.cookie('username',rows[0].name, { maxAge: 900000});
-                    res.cookie('userid',rows[0].id, { maxAge: 900000});
-                    res.json({loggedin:true, message:'Logged in as ' + rows[0].name + ".", name:rows[0].name});
+                    console.log(rows);
+                    var about = "No information shared";
+                    if(req.body.about) about = req.body.about;
+                    sequelize.query("INSERT INTO users (name,password,email, about) " +
+                        "VALUES(?,?,?, ?) ",{replacements:[req.body.user, hashedPass(req.body.password), req.body.email, about], type: sequelize.QueryTypes.INSERT})
+                        .then(function(rows){
+                            console.log("done");
+                            res.json({registered:true, message:'Your account has been created'});
+                        });
+
                 }
-            })
-            .catch(function(err) {
-                res.json({loggedin:false, message:err.toString()});
+            });
+    });
+
+
+    app.get('/deeds', function(req, res) {
+        console.log("deeds route selected...");
+        Deeds.findAll()
+            .then(function (result) {
+                console.log("find All Results...." + result);
+                res.json(result);
             });
 
 
-        /*
-        var user = Users.build({
-            name: req.body.name,
-            password: req.body.password,
-            email : req.body.email
-        });
-
-        user.save().then(function(){
-            res.json("saved");
-        })*/
-
-        /*
-         Database.findAll({
-         where: { name: req.params.items}
-         }).then(function(result){
-         console.log(result);
-         })*/
-
-
-
     });
+// this route adds a new deed event to the database
+    app.post('api/deeds/new', function (req, res) {
+
+        var deed = req.body;
+
+
+        Deed.create({
+            //deed creation details
+            title: deed.name,
+            location: deed.location,
+            date_start: deed.date_start,
+            date_end: deed.date_end,
+            description: deed.description,
+            image: deed.image_url,
+            slots: deeds.slots,
+            sponsor: deeds.sponsor,
+            sponsor_img: deeds.sponsor_image,
+            deed_coin_val: deeds.deed_coins
+        });
+    })
 
 }

@@ -4,8 +4,6 @@ var bodyParser= require('body-parser');
 var path= require('path');
 var $ = require('cheerio');
 var Sequelize = require('sequelize');
-var crypto = require('crypto'),shasum = crypto.createHash('sha1');//TODO- chagne Sha1 is broken
-var salt = "Project 15";
 
 var LIFO = require('./lifo.js');
 var Badge = require('./Badge');
@@ -65,8 +63,6 @@ app.get('/leader10',function(req,res){
             );
         });
 });
-
-
 
 var lifo = new LIFO(5);
 lifo.add(new Badge.badgeStruct("/images/tree.png","Tree Hugger","Help Environment"));

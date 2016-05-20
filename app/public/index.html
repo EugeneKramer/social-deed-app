@@ -24,6 +24,11 @@
 
 </head>
 <script>
+
+    function logout(){
+        console.log("logout");
+    }
+
     $(function(){
 
         $("#submitLogin").on("click",function(e){
@@ -43,7 +48,8 @@
                                     .append($("<a/>").text("Welcome, " + data.name + "(coin)")))
 
                                     .append($("<li/>")
-                                            .append($("<a/>").text("Logout")));
+                                            .append($("<a/>").text("Logout")
+                                                            .on("click",logout)));
                         }
                         else{
                             $("#loginFormStatus").text("Login failed. " + data.message);
@@ -51,6 +57,25 @@
                     })
                     .fail(function(data){
                         $("#loginFormStatus").text("There was a network error. Please try again.");
+                    })
+        });
+
+        $("#submitRegister").on("click", function(e){
+            if(!$("#registerForm")[0].checkValidity()) return;
+            e.preventDefault();
+            $.post("/register",$("#registerForm").serialize())
+                    .done(function(data){
+                        if(data.registered){
+                            $("#registerFormStatus").text("Registration complete. " + data.message);
+                            $("#registerSection").modal('hide');//("hide");
+                            $("#AccountCreatedDialog").modal('show');
+                        }
+                        else{
+                            $("#registerFormStatus").text("Registration failed. " + data.message);
+                        }
+                    })
+                    .fail(function(data){
+                        $("#registerFormStatus").text("There was a network error. Please try again.");
                     })
         });
     });
@@ -63,17 +88,17 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
             </button>
-            <a class="navbar-brand" href="index2.html">Social Deeds</a>
+            <a class="navbar-brand" href="index.html">Social Deeds</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Leaderboards</a></li><!--<span class="sr-only">(current)</span>-->
-                <li id="deeds"><a href="#">Deeds </a></li>
+                <li class="active"><a href="LeaderBoard.html">Leaderboards</a></li><!--<span class="sr-only">(current)</span>-->
+                <li id="deeds"><a href="deeds.html">Deeds </a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right" id="rightNavBar">
                 <li><a href="#login" id="loginFormButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
-                <li><a href="#register" id="registerFormButton" data-toggle="modal" data-target="#loginSecton">Register</a></li>
+                <li><a href="#register" id="registerFormButton" data-toggle="modal" data-target="#registerSecton">Register</a></li>
             </ul>
         </div>
     </div>
@@ -89,12 +114,12 @@
     <div class="row">
         <div class="text-center col-sm-6 ">
             <h3>Improve the community</h3>
-            <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="createButton" data-toggle="modal" data-target="">Create-A-Deed</a>
+            <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="createADeed" data-toggle="modal" data-target="">Create-A-Deed</a>
 
         </div>
         <div class="text-center col-sm-6 ">
             <h3>Get Involved!</h3>
-            <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="createButton" data-toggle="modal" data-target="">Do-A-Deed</a>
+            <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="doADeed" data-toggle="modal" data-target="">Do-A-Deed</a>
 
         </div>
         <div class="row">
@@ -140,8 +165,8 @@
                             </div>
 
                             <div class="modal-footer">
-                                <span id="loginFormStatus"></span>
-                                <button type="submit" id="submitLogin" class="btn btn-default" align="right">Submit</button>
+                                <span id="loginFormStatus">A</span>
+                                <button type="button" id="submitLogin" class="btn btn-default" align="right">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -159,27 +184,28 @@
                 <h4 class="modal-title text-center">Register</h4>
             </div>
             <div class="modal-body">
-                <form id="registerForm" action="login" method="POST">
+                <form id="registerForm">
                     <div class="form-group">
-                        <div class="oneLine" style="margin-left:0;">
-                            <label class="control-label" for="user">Email:</label>
-                            <input class="form-control" name="user" id="user" type="user" required="true" value="" placeholder="John Doe">
+                        <div class="oneLine">
+                            <label class="control-label" for="user">User Name:</label>
+                            <input class="form-control" name="user" id="user" type="text" required="true" value="" placeholder="John Doe">
                         </div>
                         <div class="infoOneLine">
                             <div class="oneLine" style="margin-left:0;">
                                 <label class="control-label" for="email">Email:</label>
                                 <input class="form-control" name="email" id="email" type="email" required="true" value="" placeholder="John.Doe@gmail.com">
                             </div>
-                            <br>
                             <div class="oneLine">
                                 <label class="control-label" for="password">Password:</label>
                                 <input class="form-control" name="password" id="password" type="password" required="true" value="" placeholder="Password">
-                                <br>
                             </div>
-
+                            <div class="oneLine">
+                                <label class="control-label" for="about">About: <small>(Optional)</small></label>
+                                <textarea rows="5" cols="40" class="form-control" name="about" id="about" type="text" value="" placeholder="Tell the world about yourself."></textarea>
+                            </div>
                             <div class="modal-footer">
-                                <span id="loginFormStatus"></span>
-                                <button type="submit" id="submitLogin" class="btn btn-default" align="right">Submit</button>
+                                <span id="registerFormStatus"></span>
+                                <button type="button" id="submitRegister" class="btn btn-default" align="right">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -199,6 +225,22 @@
             <div class="modal-body">
                 <div class="oneLine text-center">
                     We've updated Social Deeds. Have a look around.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="AccountCreatedDialog" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close modal-title" class="btn btn-default" align="left" data-dismiss="modal">X</button>
+                <h4 class="modal-title" align="center">Your account has been created!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="oneLine text-center">
+                    Your account has been created. You may log in now.
                 </div>
             </div>
         </div>
@@ -332,8 +374,14 @@
 
 
     $("#registerFormButton").click(function(){
-        $('#signUp-form').modal('show');
+        $("#registerFormStatus").text();
+        $('#registerSection').modal('show');
     });
+
+    $("#createADeed").on("click",function(){
+        $("#createSection2").modal("show");
+    });
+
     $('#homeButton').click(function(){
         ('#welcomeCenter').show();
     });
