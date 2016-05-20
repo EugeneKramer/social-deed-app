@@ -33,7 +33,7 @@ app.get('/leader',function(req,res){
             "badges," +
             "@curRank := @curRank + 1 AS rank " +
             "FROM users p, (SELECT @curRank := 0) r " +
-            "ORDER BY coins;", { type: sequelize.QueryTypes.SELECT})
+            "ORDER BY coins DESC;", { type: sequelize.QueryTypes.SELECT})
         .then(function(rows) {
             res.json({"data":
                 rows.map(function(row, i){
@@ -53,7 +53,7 @@ app.get('/leader10',function(req,res){
             "badges," +
             "@curRank := @curRank + 1 AS rank " +
             "FROM users p, (SELECT @curRank := 0) r " +
-            "ORDER BY coins LIMIT 5;", { type: sequelize.QueryTypes.SELECT})
+            "ORDER BY coins DESC LIMIT 5;", { type: sequelize.QueryTypes.SELECT})
         .then(function(rows) {
             res.json(
                 rows.map(function(row, i){

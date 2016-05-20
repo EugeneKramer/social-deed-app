@@ -30,13 +30,14 @@
         console.log("Goobye" + Cookies.get('username'));
         Cookies.remove('username');
         Cookies.remove('userid');
+        Cookies.remove('deedcoin');
     }
 
     function updateifLoggedIn() {
         if(Cookies.get('username') == undefined) return;
 
         $("#rightNavBar").empty().append($("<li/>")
-                .append($("<a/>").text("Welcome, " + Cookies.get('username') + "(coin)")))
+                .append($("<a/>").text("Welcome, " + Cookies.get('username') + "(" + Cookies.get("deedcoin") +")")))
 
                 .append($("<li/>")
                         .append($("<a/>").text("Logout")
@@ -125,21 +126,21 @@
     <div class="row">
         <div class="text-center col-sm-6 ">
             <h3>Improve the community</h3>
-            <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="createADeed" data-toggle="modal" data-target="">Create-A-Deed</a>
+            <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="createADeed" data-toggle="modal" data-target="">Create A Deed</a>
 
         </div>
         <div class="text-center col-sm-6 ">
             <h3>Get Involved!</h3>
-            <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="doADeed" data-toggle="modal" data-target="">Do-A-Deed</a>
+            <a href="deeds.html" class="btn btn-default btn-lg btn-lg ghost" id="doADeed">Do A Deed</a>
 
         </div>
         <div class="row">
             <div class="text-center col-sm-6 ">
-                <table id="top10NewDeeds" class="table-striped table-condensed">
-                    <caption><h3>New Deeds</h3></caption>
-                    <thead>
+                <table id="top10NewDeeds" class="table-striped table-condensed text-center" style="font-size:18px; margin:0 auto;">
+                    <caption><h3 srtyle="text-align:center">New Deeds</h3></caption>
+                    <thead style="text-align:center">
                         <th>Coin</th>
-                        <th>Titles</th>
+                        <th style="text-align:center">Titles</th>
                     </thead>
                     <tbody>
 
@@ -149,7 +150,7 @@
             <div class="text-center col-sm-6 ">
                 <table id="top10Players" class="table-striped table-condensed text-center" style="font-size:18px; margin:0 auto;">
                     <caption><h3>Top Volunteers</h3></caption>
-                    <thead>
+                    <thead >
                     <th>Rank</th>
                     <th>Name</th>
                     <th>DeedCoins</th>
@@ -186,7 +187,7 @@
 
                             <div class="modal-footer">
                                 <span id="loginFormStatus">A</span>
-                                <button type="button" id="submitLogin" class="btn btn-default" align="right">Submit</button>
+                                <button type="submit" id="submitLogin" class="btn btn-default" align="right">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -225,7 +226,7 @@
                             </div>
                             <div class="modal-footer">
                                 <span id="registerFormStatus"></span>
-                                <button type="button" id="submitRegister" class="btn btn-default" align="right">Submit</button>
+                                <button type="submit" id="submitRegister" class="btn btn-default" align="right">Submit</button>
                             </div>
                         </div>
                     </div>

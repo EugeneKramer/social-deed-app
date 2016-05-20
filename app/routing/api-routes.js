@@ -24,7 +24,7 @@ module.exports = function(app, sequelize, sequelizeD){
     app.post("/login", function(req,res){
 
         if((!req.body.password) || (!req.body.email)) return;
-        sequelize.query("SELECT id, name " +
+        sequelize.query("SELECT id, name, coins " +
                 "FROM users " +
                 "WHERE password = ? AND email = ?;",  { replacements: [hashedPass(req.body.password),req.body.email], type: sequelize.QueryTypes.SELECT})
             .then(function(rows) {
@@ -34,6 +34,7 @@ module.exports = function(app, sequelize, sequelizeD){
                 else{
                     res.cookie('username',rows[0].name, { maxAge: 900000});
                     res.cookie('userid',rows[0].id, { maxAge: 900000});
+                    res.cookie('deedcoin', rows[0].coins, { maxAge: 900000});
                     res.json({loggedin:true, message:'Logged in as ' + rows[0].name + ".", name:rows[0].name});
                 }
             })
@@ -75,7 +76,7 @@ module.exports = function(app, sequelize, sequelizeD){
         /*http://dba.stackexchange.com/questions/13703/get-the-rank-of-a-user-in-a-score-table*/
         sequelizeD.query("SELECT title, deed_coin_val " +
                 "FROM deeds " +
-                "ORDER BY deed_coin_val " +
+                "ORDER BY deed_coin_val DESC " +
                 "LIMIT 5;", { type: sequelize.QueryTypes.SELECT})
             .then(function(rows) {
                 console.log(rows);
