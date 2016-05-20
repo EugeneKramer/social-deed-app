@@ -15,7 +15,6 @@ var app= express();
 var PORT= process.env.PORT||8080;
 var staticContentFolder = __dirname + '/app/public'
 
-
 app.use(express.static(staticContentFolder));
 
 app.use(bodyParser.json());
@@ -37,11 +36,8 @@ app.get('/leader',function(req,res){
             "FROM ranking p, (SELECT @curRank := 0) r " +
             "ORDER BY coins;", { type: sequelize.QueryTypes.SELECT})
         .then(function(rows) {
-            console.log(rows);
             res.json({"data":
                 rows.map(function(row, i){
-                    "use strict";
-
                     return [row.rank,
                             row.name,
                             row.coins,
@@ -69,10 +65,7 @@ app.get('/leader10',function(req,res){
             );
         });
 });
-function hashedPass(pass){
-    "use strict";
-    return shasum.update(salt + "foo").digest("hex");
-}
+
 
 
 var lifo = new LIFO(5);
@@ -84,7 +77,6 @@ app.get("/awards", function(req, res){
     "use strict";
     return res.json(lifo.getElements());
 });
-
 
 
 app.use(function(req,res){

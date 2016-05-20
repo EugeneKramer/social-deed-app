@@ -22,6 +22,7 @@
     "express": "^4.13.4",
     "express-stormpath": "^3.1.2",
     "mysql": "^2.10.2",
-    "sequelize": "^3.23.1"
+    "sequelize": "^3.23.1",
+    "sha.js": "^2.4.5"
   }
 }

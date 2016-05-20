@@ -19,7 +19,7 @@
     <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
     <!-- Bootswatch -->
     <link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">
-    <link rel="stylesheet" href="/Users/Leslie/social_deeds/app/public/index.css" type="text/css">
+
     <title>Social Deeds</title>
 
 </head>
@@ -34,8 +34,16 @@
             $.post("/login",$("#loginForm").serialize())
                     .done(function(data){
                         if(data.loggedin){
-                            //update form with cookies
+                            console.log(data);
                             $("#loginFormStatus").text("Login successful. " + data.message);
+                            $("#loginSection").modal('hide');//("hide");
+                            $("#WelcomeUserName").text(data.name);//
+                            $("#WelcomeSection2").modal('show');
+                            $("#rightNavBar").empty().append($("<li/>")
+                                    .append($("<a/>").text("Welcome, " + data.name + "(coin)")))
+
+                                    .append($("<li/>")
+                                            .append($("<a/>").text("Logout")));
                         }
                         else{
                             $("#loginFormStatus").text("Login failed. " + data.message);
@@ -63,7 +71,7 @@
                 <li class="active"><a href="#">Leaderboards</a></li><!--<span class="sr-only">(current)</span>-->
                 <li id="deeds"><a href="#">Deeds </a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right" id="rightNavBar">
                 <li><a href="#login" id="loginFormButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
                 <li><a href="#register" id="registerFormButton" data-toggle="modal" data-target="#loginSecton">Register</a></li>
             </ul>
@@ -181,115 +189,126 @@
     </div>
 </div>
 
-<!--SIGN UP FORM-->
-<div id="signUp-form2" class="modal fade" role="dialog">
+<div id="WelcomeSection2" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" align="center">Sign-Up</h4>
+                <button type="button" class="close modal-title" class="btn btn-default" align="left" data-dismiss="modal">X</button>
+                <h4 class="modal-title" align="center">Welcome back, <span id="WelcomeUserName"></span>!</h4>
             </div>
             <div class="modal-body">
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="focusedInput">E-mail</label>
-                    <div class="infoOneLine">
-                        <div class="oneLine" style="margin-left:0;">
-                            <input class="form-control" id="focusedInput" type="email" value="" placeholder="John.Doe@gmail.com">
-                        </div>
-                        <br>
-
-                        <div class="oneLine">
-                            <label class="control-label" for="focusedInput">Username:</label>
-                            <input class="form-control" id="focusedInput" type="text" value="" placeholder="username">
-                            <br>
-                        </div>
-                        <div class="oneLine">
-                            <label class="control-label" for="focusedInput">Password:</label>
-                            <input class="form-control" id="focusedInput" type="password" value="" placeholder="Password">
-                            <br>
-                        </div>
-                        <div class="oneLine">
-                            <label class="control-label" for="focusedInput">Select An Image For Your Profile:</label><br>
-                            <form action="demo_form.asp">
-                                <input type="file" name="pic" accept="image/*">
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" id="enterLogin" class="btn btn-default" align="right">Enter</button>
-                            <br>
-                            <br>
-                            <button type="button" class="close" class="btn btn-default" align="center" data-dismiss="modal">X</button>
-                        </div>
-                    </div>
+                <div class="oneLine text-center">
+                    We've updated Social Deeds. Have a look around.
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
+
+
 <!--CREATE A DEED FORM-->
-
-<div id="createSection" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+<div class="modal fade" id="createSection2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" align="center">Create-A-Deed</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title text-center">Create-A-Deed</h4>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <!-- <div class="addEventForm"> -->
-                    <label class="control-label animated fadeInDown" for="focusedInput">Deed Info:</label>
-                    <div class="infoOneLine">
-                        <div class="oneLine" style="margin-left: 0;">
-                            <input class="form-control eventName animated fadeInDown" id="focusedInput" type="text" value="" placeholder="Event Name" required>
+
+                <form>
+                    <div class="form-group">
+                        <label for="deedTitle">Deed Title:</label>
+                        <input type="text" class="form-control" id="deedTitle" aria-describedby="emailHelp" placeholder="Deed Title">
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="dateStart">Date Start:</label>
+                            <input type="date" class="form-control" id="dateStart" placeholder="">
                         </div>
-                        <br>
-                        <div class="oneLine">
-                            <label class="control-label animated fadeInDown" for="focusedInput">Date:</label>
-                            <input class="form-control eventDate animated fadeInDown" id="focusedInput" type="date" value="" placeholder="Date" required>
-                        </div>
-                        <br>
-                        <div class="oneLine">
-                            <label class="control-label animated fadeInDown" for="focusedInput">Time:</label>
-                            <input class="form-control eventTime animated fadeInDown" id="focusedInput" type="time" value="" placeholder="Time" required>
-                        </div>
-                        <br>
-                        <div class="oneLine">
-                            <label class="control-label" for =focusedInput>Location:</label>
-                            <input class="form-control locationDescription" id="focusedInput" type="text" value="" placeholder="Location" required>
+
+                        <div class="form-group col-md-6">
+                            <label for="dateEnd">Date End:</label>
+                            <input type="date" class="form-control" id="dateEnd" placeholder="">
                         </div>
                     </div>
-                </div>
-                <div id="others">
-                    <!-- <label class="control-label" for="focusedInput">What Skillsets do you possess?</label><br>
-                  <input  id="check" type="checkbox" name="skills" value="skillset1"> IT<br>
-                  <input  id="check" type="checkbox" name="skills" value="skillset2"> Art<br>
-                  <input  id="check" type="checkbox" name="skills" value="skillset3">Management<br>-->
-                    <input  id="option"type="checkbox" name="skills" value="skillset3"> Other<br>
-                    <label  id="other"for="focusedInput">Other:</label>
-                    <input type="text" class="form-control" id="other1">
-                </div>
-                <br>
-                <div class="oneLine">
-                    <label class="control-label" for="focusedInput">Deed Description:</label>
-                    <textarea class="form-control locationDescription" id="focusedInput" type="text" value="" placeholder="Description"></textarea>
-                </div>
-                <br>
-                <div class="oneLine">
-                    <label class="control-label" for="focusedInput">Select An Image for you Event</label><br>
-                    <form action="demo_form.asp">
-                        <input type="file" name="pic" accept="image/*">
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" formnovalidate="" id="addEvent" class="btn btn-default animated bounce" align="center">Add-A-Deed</button>
-                    <br>
-                    <br>
-                    <button type="button" class="close" class="btn btn-default" data-dismiss="modal">X</button>
-                </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="timeStart"> Time Start:</label>
+                            <input type="time" class="form-control" id="dateStart" placeholder="">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="timeEnd">Time End:</label>
+                            <input type="time" class="form-control" id="dateEnd" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" class="form-control" id="location" aria-describedby="emailHelp" placeholder="Location">
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deedDescription">Deed Description:</label>
+                        <input type="text" class="form-control" id="deedDescription" aria-describedby="emailHelp" placeholder="Please give a description of your deed">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="exampleSelect2">Deed Coins:</label>
+                        <select multiple class="form-control" id="deedCoins">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="exampleSelect2">Slots</label>
+                        <select  multiple class="form-control" id="slots">
+
+                            <option>1</option>
+                            <option >2</option>
+                            <option >3</option>
+                            <option >4</option>
+                            <option >5</option>
+                            <option >6</option>
+                            <option >7</option>
+                            <option >8</option>
+                            <option >9</option>
+                            <option >10</option>
+                            <option >No Limit</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imageUpload">Upload an image for your deed:</label><br>
+                        <label class="custom-file">
+                            <input type="file" id="file" class="custom-file-input">
+                            <span class="custom-file-control"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="deedTitle">Sponsor Name:</label>
+                        <input type="text" class="form-control" id="sponsorName" aria-describedby="sponsor" placeholder="Sponsor Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sponsorImageUpload">Upload a sponsor Image:</label><br>
+                        <label class="custom-file">
+                            <input type="file" id="file" class="custom-file-input">
+                            <span class="custom-file-control"></span>
+                        </label>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>
+</div>
 </body>
 <script type="text/javascript">
     $(function(){
@@ -302,9 +321,14 @@
                                 .append($("<td/>").text(player.score))
                     }));
                 });
+
+
+        //$('createSection2').bootstrapMaterialDesign();
     });
 
-    $("#loginFormButton").on("click",()=>{ $("#loginSection").modal('show'); });
+    $("#loginFormButton").on("click", function(){
+        $("#loginFormStatus").text("");
+        $("#loginSection").modal('show'); });
 
 
     $("#registerFormButton").click(function(){
