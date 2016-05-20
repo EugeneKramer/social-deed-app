@@ -21,8 +21,9 @@ app.use(bodyParser.text());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 
 var sequelize = new Sequelize("mysql://ksy5pi6dqzh8gsxr:tl8d99w1bul0rfmr@tviw6wn55xwxejwj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/pt38d7p8sxy79lyx");
+var sequelizeD = new Sequelize("mysql://iss7a2c2lcow0icm:sylgrzdf9u529sia@l9dwvv6j64hlhpul.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/zbilm8sq8aqxtp9j");
 
-require('./app/routing/api-routes.js')(app, sequelize);
+require('./app/routing/api-routes.js')(app, sequelize,sequelizeD);
 
 app.get('/leader',function(req,res){
     /*http://stackoverflow.com/questions/3333665/rank-function-in-mysql*/
@@ -31,7 +32,7 @@ app.get('/leader',function(req,res){
             "coins," +
             "badges," +
             "@curRank := @curRank + 1 AS rank " +
-            "FROM ranking p, (SELECT @curRank := 0) r " +
+            "FROM users p, (SELECT @curRank := 0) r " +
             "ORDER BY coins;", { type: sequelize.QueryTypes.SELECT})
         .then(function(rows) {
             res.json({"data":
@@ -51,8 +52,8 @@ app.get('/leader10',function(req,res){
             "coins," +
             "badges," +
             "@curRank := @curRank + 1 AS rank " +
-            "FROM ranking p, (SELECT @curRank := 0) r " +
-            "ORDER BY coins;", { type: sequelize.QueryTypes.SELECT})
+            "FROM users p, (SELECT @curRank := 0) r " +
+            "ORDER BY coins LIMIT 5;", { type: sequelize.QueryTypes.SELECT})
         .then(function(rows) {
             res.json(
                 rows.map(function(row, i){

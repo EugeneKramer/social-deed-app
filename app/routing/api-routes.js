@@ -19,7 +19,7 @@ function hashedPass(pass){
 
 //1897fa4000b93a3684d25716e333440dba777aee24f717fbc2232a283fdb26ef go
 
-module.exports = function(app, sequelize){
+module.exports = function(app, sequelize, sequelizeD){
 
     app.post("/login", function(req,res){
 
@@ -69,6 +69,25 @@ module.exports = function(app, sequelize){
             });
     });
 
+    app.get('/deed10',function(req,res){
+        console.log("here");
+        /*http://stackoverflow.com/questions/3333665/rank-function-in-mysql*/
+        /*http://dba.stackexchange.com/questions/13703/get-the-rank-of-a-user-in-a-score-table*/
+        sequelizeD.query("SELECT title, deed_coin_val " +
+                "FROM deeds " +
+                "ORDER BY deed_coin_val " +
+                "LIMIT 5;", { type: sequelize.QueryTypes.SELECT})
+            .then(function(rows) {
+                console.log(rows);
+                res.json(
+                    rows.map(function(deed, i){
+                        console.log(deed);
+                        return {coins: deed.deed_coin_val,
+                            title: deed.title}
+                    })
+                );
+            });
+    });
 
     app.get('/deeds', function(req, res) {
         console.log("deeds route selected...");
