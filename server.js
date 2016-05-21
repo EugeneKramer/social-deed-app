@@ -68,8 +68,8 @@ app.get('/leader10',function(req,res){
         });
 });
 
-lifo.add(new Badge.badgeStruct("/images/tree.png","Tree Hugger","Help Environment"));
-lifo.add(new Badge.badgeStruct("/images/poor.png","Poverty Crusher","Crush Poverty"));
+lifo.add(new Badge.badgeStruct("/images/tree.png","Tree Hugger","Help restore the environment"));
+lifo.add(new Badge.badgeStruct("/images/poverty.png","Poverty Crusher","Meeting poverty head on"));
 
 
 app.get("/awards", function(req, res){

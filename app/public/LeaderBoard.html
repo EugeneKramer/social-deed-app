@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.1/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.marquee/1.3.1/jquery.marquee.min.js"></script>
     <script src="https://rawgithub.com/tobia/Pause/master/jquery.pause.js"></script>
     <script src="marquee.js"></script>
@@ -109,10 +109,86 @@
             "ajax": "leader"
         });
         window.setTimeout(renderToolTips,5000);
+        window.setInterval(renderToolTips, 2000);
     });
 
 
 </script>
+<script>
 
+    function logout(){
+        console.log("Goobye" + Cookies.get('username'));
+        Cookies.remove('username');
+        Cookies.remove('userid');
+        Cookies.remove('deedcoin');
+        Cookies.remove('trophies');
+        location.reload();
+    }
+
+    function updateifLoggedIn() {
+        console.log("ran");
+        if(Cookies.get('username') == undefined) return;
+        console.log("ran2");
+        $("#rightNavBar").empty().append($("<li/>")
+                .append($("<a/>").text("Welcome, " + Cookies.get('username') + "(" + Cookies.get("deedcoin") +")")))
+
+                .append($("<li/>")
+                        .append($("<a/>").text("Logout")
+                                .on("click", logout)));
+    }
+
+    $(function(){
+
+        updateifLoggedIn();
+
+        $("#submitLogin").on("click",function(e){
+            if(!$("#loginForm")[0].checkValidity()) return;
+            e.preventDefault();
+            $("#loginFormStatus").text("Logging in.");
+
+            $.post("/login",$("#loginForm").serialize())
+                    .done(function(data){
+                        if(data.loggedin){
+                            console.log(data);
+                            $("#loginFormStatus").text("Login successful. " + data.message);
+                            $("#loginSection").modal('hide');//("hide");
+                            bootbox.alert("Welcome back " + data.name + "!");
+                            //("#WelcomeUserName").text(data.name);//
+                            //$("#WelcomeSection2").modal('show');
+                            updateifLoggedIn();
+                        }
+                        else{
+                            $("#loginFormStatus").text("Login failed. " + data.message);
+                        }
+                    })
+                    .fail(function(data){
+                        $("#loginFormStatus").text("There was a network error. Please try again.");
+                    })
+        });
+
+        $("#submitRegister").on("click", function(e){
+            //alert("here");
+            if(!$("#registerForm")[0].checkValidity()) return;
+            e.preventDefault();
+            //alert("go");
+            $.post("/register",$("#registerForm").serialize())
+                    .done(function(data){
+                        console.log("here");
+                        if(data.registered){
+                            $("#registerFormStatus").text("Registration complete. " + data.message);
+                            $("#registerSection").modal('hide');//("hide");
+                            bootbox.alert("Your account has been been created. Please log in now.");
+                            //$("#AccountCreatedDialog").modal('show');
+                        }
+                        else{
+                            $("#registerFormStatus").text("Registration failed. " + data.message);
+                        }
+                    })
+                    .fail(function(data){
+                        $("#registerFormStatus").text("There was a network error. Please try again.");
+                    })
+        });
+    });
+</script>
 </body>
 </html>
