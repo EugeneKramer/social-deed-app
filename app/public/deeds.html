@@ -351,8 +351,8 @@
                     '<td>'+moment(d.date_end).format('LL')+'</td>' +
                     '</tr>'+
                     '<tr>'+
-                    '<td>Sponsors:</td>'+
-                    '<td>'+ d.sponsor +'</td>'+
+                    '<td>Trophy:</td>'+
+                    '<td>'+ trophy(d.sponsor) +'</td>'+
                     '</tr>'+
                             '<td align="center">' + $("<div/>").append($("<button/>").text("Sign Up").css({margin:"0 auto"}).attr({"onclick":"usersignup('" + d.title +
                     "'," +d.id + "," + d.deed_coin_val + ")"})).html() + '</td></td>' +
@@ -370,8 +370,20 @@
         });
 });
 
+    function trophy(trophyname){
+        if(trophyname == "none") return "None";
+        var trophies = {poverty:"/images/poverty.png",
+                        education:"/images/education.png",
+                        environment:"/images/tree.png",
+                        crisis:"/images/crisis"};
+        return $("<div/>").append($("<img/>").attr({src:trophies[trophyname],
+            'width':'25px',
+            'height':'25px'})).html();
+
+    }
+
     function usersignup(title, id, coin){
-        if(!Cookies.get('userrid')){
+        if(!Cookies.get('userid')){
             bootbox.alert("You must be logged in to sign up.");
         }
         else {
@@ -381,7 +393,7 @@
             $("#signuptitle").text(title);
             $("#ConfirmSignUp").modal('show');
             Cookies.set('deedcoin', Number(Cookies.get('deedcoin')) + coin);
-            $.post("/deedsignup", {"deedsid": id, coins: Cookies.get('deedcoin'), userid: Cookies.get('userid')})
+            $.post("/deedsignup", {"deedid": id, coins: Cookies.get('deedcoin'), userid: Cookies.get('userid')})
                     .done(function (data) {
                         console.log(data);
                     });

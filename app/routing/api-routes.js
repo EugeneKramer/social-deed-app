@@ -107,7 +107,9 @@ module.exports = function(app, sequelize, sequelizeD){
 
     app.get('/deeds', function(req, res) {
         console.log("deeds route selected...");
-        Deeds.findAll()
+        Deeds.findAll({
+            where:{slots:{$gt:0}}
+        })
             .then(function (result) {
                 console.log("find All Results...." + result);
                 res.json(result);
