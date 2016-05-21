@@ -22,6 +22,8 @@
     <script src="userstatus.js"></script>
     <title>Social Deeds</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.1/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootbox/4.4.0/bootbox.min.js"></script>
+
 
 
 </head>
@@ -62,8 +64,9 @@
                             console.log(data);
                             $("#loginFormStatus").text("Login successful. " + data.message);
                             $("#loginSection").modal('hide');//("hide");
-                            $("#WelcomeUserName").text(data.name);//
-                            $("#WelcomeSection2").modal('show');
+                            bootbox.alert("Welcome back " + data.name + "!");
+                            //("#WelcomeUserName").text(data.name);//
+                            //$("#WelcomeSection2").modal('show');
                             updateifLoggedIn();
                         }
                         else{
@@ -86,7 +89,8 @@
                         if(data.registered){
                             $("#registerFormStatus").text("Registration complete. " + data.message);
                             $("#registerSection").modal('hide');//("hide");
-                            $("#AccountCreatedDialog").modal('show');
+                            bootbox.alert("Your account has been been created. Please log in now.");
+                            //$("#AccountCreatedDialog").modal('show');
                         }
                         else{
                             $("#registerFormStatus").text("Registration failed. " + data.message);
