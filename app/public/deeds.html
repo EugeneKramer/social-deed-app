@@ -20,34 +20,104 @@
     <link rel="stylesheet" href="./index.css">
     <script src="http://datatables.net/download/build/nightly/jquery.dataTables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootbox/4.4.0/bootbox.min.js"></script>
     <title>Social Deeds</title>
-  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.1/js.cookie.min.js"></script>
+
 </head>
 <body>
 <!--NAV BAR-->
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Social Deeds</a>
-    </div>
+<script>
 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Leaderboards <span class="sr-only">(current)</span></a></li>
-     </ul>
-           <ul class="nav navbar-nav navbar-right">
-        <li><a href="#" id="myProfile" data-toggle='modal'> My Profile</a></li>
-        <li><a href="#" id="loginButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
-        <li><a href="#" id="loginOutButton" data-toggle="modal" data-target="#loginOutSecton">Log Out</a></li>
-      </ul>
+    function logout(){
+        console.log("Goobye" + Cookies.get('username'));
+        Cookies.remove('username');
+        Cookies.remove('userid');
+        Cookies.remove('deedcoin');
+        location.reload();
+    }
+
+    function updateifLoggedIn() {
+        if(Cookies.get('username') == undefined) return;
+
+        $("#rightNavBar").empty().append($("<li/>")
+                .append($("<a/>").text("Welcome, " + Cookies.get('username') + "(" + Cookies.get("deedcoin") +")")))
+
+                .append($("<li/>")
+                        .append($("<a/>").text("Logout")
+                                .on("click", logout)));
+    }
+
+    $(function(){
+
+        updateifLoggedIn();
+
+        $("#submitLogin").on("click",function(e){
+            if(!$("#loginForm")[0].checkValidity()) return;
+            e.preventDefault();
+            $("#loginFormStatus").text("Logging in.");
+
+            $.post("/login",$("#loginForm").serialize())
+                    .done(function(data){
+                        if(data.loggedin){
+                            console.log(data);
+                            $("#loginFormStatus").text("Login successful. " + data.message);
+                            $("#loginSection").modal('hide');//("hide");
+                            $("#WelcomeUserName").text(data.name);//
+                            $("#WelcomeSection2").modal('show');
+                            updateifLoggedIn();
+                        }
+                        else{
+                            $("#loginFormStatus").text("Login failed. " + data.message);
+                        }
+                    })
+                    .fail(function(data){
+                        $("#loginFormStatus").text("There was a network error. Please try again.");
+                    })
+        });
+
+        $("#submitRegister").on("click", function(e){
+            if(!$("#registerForm")[0].checkValidity()) return;
+            e.preventDefault();
+            $.post("/register",$("#registerForm").serialize())
+                    .done(function(data){
+                        if(data.registered){
+                            $("#registerFormStatus").text("Registration complete. " + data.message);
+                            $("#registerSection").modal('hide');//("hide");
+                            $("#AccountCreatedDialog").modal('show');
+                        }
+                        else{
+                            $("#registerFormStatus").text("Registration failed. " + data.message);
+                        }
+                    })
+                    .fail(function(data){
+                        $("#registerFormStatus").text("There was a network error. Please try again.");
+                    })
+        });
+    });
+</script>
+<body>
+<!--NAV BAR-->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+            <a class="navbar-brand" href="index.html">Social Deeds</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="LeaderBoard.html">Leaderboards</a></li><!--<span class="sr-only">(current)</span>-->
+                <li id=""><a href="deeds.html">Deeds </a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" id="rightNavBar">
+                <li><a href="#login" id="loginFormButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
+                <li><a href="#register" id="registerFormButton" data-toggle="modal" data-target="#registerSecton">Register</a></li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
 
 <div class="page-header">
@@ -76,8 +146,6 @@
                        
                         <div class="modal-footer">
                     <button type="submit" id="enterLogin" class="btn btn-default" align="right">Enter</button>
-                    
-                    
                     <button type="submit" id="signUp" class="btn btn-default" align="left">Sign-Up</button>
                     <br>
                     <br>
@@ -113,6 +181,27 @@
             </thead>
         </table>
     </div>
+<div id="ConfirmSignUp" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close modal-title" class="btn btn-default" align="left" data-dismiss="modal">X</button>
+                <h4 class="modal-title" align="center">Sign up confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="oneLine text-center">
+                    Would you like to sign up for <span id="signuptitle"></span>?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" align="right" data-dismiss="modal" onclick="location.reload(true)">Ok</button>
+
+                <!--<button type="button" id="submitRegister" class="close btn btn-default" align="right"  data-dismiss="modal">No</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 
 </body>
 <script type=text/javascript>
@@ -230,7 +319,7 @@
             var tr = $(this).closest('tr');
             var row = table.row(tr);
             var detailWell = '<div class="well well-lg">details well</div>';
-            console.log(row.data().title);
+            //console.log(row.data().title);
            //alert("you clicked the " + row.data().title + " row");
             if (row.child.isShown()) {
                 // This row is already open - close it
@@ -246,13 +335,12 @@
         });
         function format ( d ) {
             // `d` is the original data object for the row
+            //console.log(d.title);
             return '<div class="well well-lg">'+
                     '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
                     '<tr>'+
                     '<td>Description:</td>'+
                     '<td>'+d.description+'</td>'+
-                    '<td>Deed Point Value</td>'+
-                    '<td>'+d.deed_coin_val+'</td>'+
                     '</tr>'+
                     '<tr>' +
                     '<td>'+'Start Date'+'</td>'+
@@ -266,6 +354,8 @@
                     '<td>Sponsors:</td>'+
                     '<td>'+ d.sponsor +'</td>'+
                     '</tr>'+
+                            '<td align="center">' + $("<div/>").append($("<button/>").text("Sign Up").css({margin:"0 auto"}).attr({"onclick":"usersignup('" + d.title +
+                    "'," +d.id + "," + d.deed_coin_val + ")"})).html() + '</td></td>' +
                     '</table>'+
                     '</div>';
         }
@@ -280,6 +370,23 @@
         });
 });
 
+    function usersignup(title, id, coin){
+        if(!Cookies.get('userrid')){
+            bootbox.alert("You must be logged in to sign up.");
+        }
+        else {
+            console.log(title)
+            console.log(id);
+            console.log(coin);
+            $("#signuptitle").text(title);
+            $("#ConfirmSignUp").modal('show');
+            Cookies.set('deedcoin', Number(Cookies.get('deedcoin')) + coin);
+            $.post("/deedsignup", {"deedsid": id, coins: Cookies.get('deedcoin'), userid: Cookies.get('userid')})
+                    .done(function (data) {
+                        console.log(data);
+                    });
+        }
+    }
 
 
 </script>

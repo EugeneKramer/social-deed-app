@@ -89,6 +89,21 @@ module.exports = function(app, sequelize, sequelizeD){
                 );
             });
     });
+    app.post('/deedsignup', function(req, res){
+        sequelizeD.query("UPDATE deeds " +
+                "SET slots=0 " +
+                "WHERE id = ?", {replacements:[req.body.deedid], type: sequelize.QueryTypes.UPDATE})
+            .then(function(rows) {
+                console.log(rows);
+                console.log("here");
+                sequelize.query("UPDATE users " +
+                    "SET coins=? "+
+                    "WHERE id=? ", {replacements:[req.body.coins, req.body.userid], type: sequelize.QueryTypes.UPDATE})
+                    .then(function(rows) {
+                        console.log(rows);
+                    });
+            });
+    });
 
     app.get('/deeds', function(req, res) {
         console.log("deeds route selected...");
