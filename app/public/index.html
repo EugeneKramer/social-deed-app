@@ -129,7 +129,6 @@
         </div>
     </div>
 </nav>
-
 <div class="container">
     <div class="row">
         <div class="jumbotron">
@@ -225,7 +224,6 @@
                             <label class="control-label" for="user">User Name:</label>
                             <input class="form-control" name="user" id="user" type="text" required="true" value="" placeholder="John Doe">
                         </div>
-                        <div class="infoOneLine">
                             <div class="oneLine" style="margin-left:0;">
                                 <label class="control-label" for="email">Email:</label>
                                 <input class="form-control" name="email" id="email" type="email" required="true" value="" placeholder="John.Doe@gmail.com">
@@ -244,38 +242,6 @@
                             </div>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="WelcomeSection2" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close modal-title" class="btn btn-default" align="left" data-dismiss="modal">X</button>
-                <h4 class="modal-title" align="center">Welcome back, <span id="WelcomeUserName"></span>!</h4>
-            </div>
-            <div class="modal-body">
-                <div class="oneLine text-center">
-                    We've updated Social Deeds. Have a look around.
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="AccountCreatedDialog" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close modal-title" class="btn btn-default" align="left" data-dismiss="modal">X</button>
-                <h4 class="modal-title" align="center">Your account has been created!</h4>
-            </div>
-            <div class="modal-body">
-                <div class="oneLine text-center">
-                    Your account has been created. You may log in now.
-                </div>
             </div>
         </div>
     </div>
@@ -381,6 +347,10 @@
                     </div>
 
                 </form>
+            </div>
+            <div class="modal-footer">
+                <span id="registerFormStatus"></span>
+                <button type="submit" id="submitNewDeed" class="btn btn-default" align="right">Submit</button>
             </div>
         </div>
     </div>

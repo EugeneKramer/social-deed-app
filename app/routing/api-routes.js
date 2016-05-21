@@ -126,8 +126,7 @@ module.exports = function(app, sequelize, sequelizeD, lifo){
                 console.log(rows);
                 sequelize.query("UPDATE users " +
                     "SET coins=? " +
-                    "SET badges=?"+
-                    "WHERE id=? ", {replacements:[req.body.coins, req.body.trophy, req.body.userid], type: sequelize.QueryTypes.UPDATE})
+                    "WHERE id=? ", {replacements:[req.body.coins, req.body.userid], type: sequelize.QueryTypes.UPDATE})
                     .then(function(rows) {
                         console.log(rows);
                     });
