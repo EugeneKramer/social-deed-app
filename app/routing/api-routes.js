@@ -6,6 +6,8 @@ var Sequelize =require('sequelize');
 var createHash = require('sha.js');
 var crypto = require('crypto'),shasum = crypto.createHash('sha1');//TODO- chagne Sha1 is broken
 var Deeds = require("../model/deeds.js");
+var LIFO = require('./lifo.js');
+var Badge = require('./Badge');
 
 
 var salt = "Project 15";
@@ -19,7 +21,7 @@ function hashedPass(pass){
 
 //1897fa4000b93a3684d25716e333440dba777aee24f717fbc2232a283fdb26ef go
 
-module.exports = function(app, sequelize, sequelizeD){
+module.exports = function(app, sequelize, sequelizeD, lifo){
 
     app.post("/login", function(req,res){
 

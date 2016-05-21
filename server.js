@@ -23,7 +23,10 @@ app.use(bodyParser.json({type:'application/vnd.api+json'}));
 var sequelize = new Sequelize("mysql://ksy5pi6dqzh8gsxr:tl8d99w1bul0rfmr@tviw6wn55xwxejwj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/pt38d7p8sxy79lyx");
 var sequelizeD = new Sequelize("mysql://iss7a2c2lcow0icm:sylgrzdf9u529sia@l9dwvv6j64hlhpul.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/zbilm8sq8aqxtp9j");
 
-require('./app/routing/api-routes.js')(app, sequelize,sequelizeD);
+var lifo = new LIFO(5);
+
+
+require('./app/routing/api-routes.js')(app, sequelize,sequelizeD, lifo);
 
 app.get('/leader',function(req,res){
     /*http://stackoverflow.com/questions/3333665/rank-function-in-mysql*/
@@ -65,7 +68,6 @@ app.get('/leader10',function(req,res){
         });
 });
 
-var lifo = new LIFO(5);
 lifo.add(new Badge.badgeStruct("/images/tree.png","Tree Hugger","Help Environment"));
 lifo.add(new Badge.badgeStruct("/images/poor.png","Poverty Crusher","Crush Poverty"));
 

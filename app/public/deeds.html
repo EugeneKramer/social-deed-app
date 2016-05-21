@@ -355,7 +355,7 @@
                     '<td>'+ trophy(d.sponsor) +'</td>'+
                     '</tr>'+
                             '<td align="center">' + $("<div/>").append($("<button/>").text("Sign Up").css({margin:"0 auto"}).attr({"onclick":"usersignup('" + d.title +
-                    "'," +d.id + "," + d.deed_coin_val + ")"})).html() + '</td></td>' +
+                    "'," +d.id + "," + d.deed_coin_val + "," + d.sponsor +")"})).html() + '</td></td>' +
                     '</table>'+
                     '</div>';
         }
@@ -382,7 +382,7 @@
 
     }
 
-    function usersignup(title, id, coin){
+    function usersignup(title, id, coin, trophy){
         if(!Cookies.get('userid')){
             bootbox.alert("You must be logged in to sign up.");
         }
@@ -393,7 +393,7 @@
             $("#signuptitle").text(title);
             $("#ConfirmSignUp").modal('show');
             Cookies.set('deedcoin', Number(Cookies.get('deedcoin')) + coin);
-            $.post("/deedsignup", {"deedid": id, coins: Cookies.get('deedcoin'), userid: Cookies.get('userid')})
+            $.post("/deedsignup", {"deedid": id, coins: Cookies.get('deedcoin'), userid: Cookies.get('userid'), trophies:trophy})
                     .done(function (data) {
                         console.log(data);
                     });
