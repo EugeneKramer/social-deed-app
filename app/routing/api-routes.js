@@ -105,6 +105,7 @@ module.exports = function(app, sequelize, sequelizeD, lifo){
         /*http://dba.stackexchange.com/questions/13703/get-the-rank-of-a-user-in-a-score-table*/
         sequelizeD.query("SELECT title, deed_coin_val " +
                 "FROM deeds " +
+                "WHERE slots > 0 " +
                 "ORDER BY deed_coin_val DESC " +
                 "LIMIT 5;", { type: sequelize.QueryTypes.SELECT})
             .then(function(rows) {
