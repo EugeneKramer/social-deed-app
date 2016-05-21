@@ -27,6 +27,7 @@
     <script src="https://cdn.jsdelivr.net/bootbox/4.4.0/bootbox.min.js"></script>
     <title>Social Deeds</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.1/js.cookie.min.js"></script>
+    <meta name="description" content="Looking to do something to help your community? This page has a list of deeds that waiting to be fulfilled. Collect DeedCoins and badges while you're at it!">
 
 </head>
 <body>
@@ -374,10 +375,10 @@
         });
 });
 
-    var trophies = {poverty:{url:"/images/poverty.png", name:"Poverty Stopper Trophy",description:"Awarded for alleviating poverty"},
+    var trophies = {poverty:{url:"/images/poor.png", name:"Poverty Stopper Trophy",description:"Awarded for alleviating poverty"},
         education:{url:"/images/education.png",name:"Education Trophy",description:"Awarded for providing public education services"},
         environment:{url:"/images/tree.png",name:"Tree Hugger Trophy",description:"Awarded for helping preserve and restore the environment"},
-        crisis:{url:"/images/crisis",name:"Crisis Trophy",description:"Awarded for helping people in crisis situations"}};
+        crisis:{url:"/images/crisis.png",name:"Crisis Trophy",description:"Awarded for helping people in crisis situations"}};
     function trophy(trophyname){
         if(trophyname == "none") return "None";
 

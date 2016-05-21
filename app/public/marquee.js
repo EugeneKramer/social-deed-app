@@ -14,7 +14,7 @@ $(function(){
         })
         .done(function(data) {
             $("#a").append(data.map(function(e,i){
-                return createNewBadgeAwardHTML("AB",e)})
+                return createNewBadgeAwardHTML("Bone crusher",e)})
             );
             $('.marquee').marquee({
                 pauseOnHover: true,
