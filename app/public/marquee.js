@@ -3,8 +3,13 @@
  */
 $(function(){
 
+    $('#example tbody').on('click', 'tr', function () {
+        var person = $(this).closest('tr').children('td')[1].toString();
+            var win = window.open('profile/' + person, '_blank');
+            win.focus();
 
-
+    });
+    
     $.get( "/awards", function() {
         })
         .done(function(data) {

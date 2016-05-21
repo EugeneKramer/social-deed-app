@@ -23,6 +23,32 @@ function hashedPass(pass){
 
 module.exports = function(app, sequelize, sequelizeD, lifo){
 
+
+    app.get('/profile/:username', function (req, res) {
+        var username = req.params.username;
+        res.json(username);
+        sequelize.query("SELECT id, name, coins, badges " +
+                "FROM users " +
+                "WHERE name = ?;",  { replacements: [username], type: sequelize.QueryTypes.SELECT})
+            .then(function(rows) {
+                console.log(rows);
+                if(rows.length == 0)
+                    res.json({loggedin:false, message:'Invalid email or password.'});
+                else{
+                    res.cookie('username',rows[0].name, { maxAge: 900000});
+                    res.cookie('userid',rows[0].id, { maxAge: 900000});
+                    res.cookie('deedcoin', rows[0].coins, { maxAge: 900000});
+                    res.cookie('trophies', rows[0].badges, { maxAge: 900000});
+                    res.json({loggedin:true, message:'Logged in as ' + rows[0].name + ".", name:rows[0].name});
+                }
+            })
+            .catch(function(err) {
+                res.json({loggedin:false, message:err.toString()});
+            });
+
+        console.log(user);
+    });
+
     app.post("/login", function(req,res){
 
         if((!req.body.password) || (!req.body.email)) return;
@@ -37,6 +63,7 @@ module.exports = function(app, sequelize, sequelizeD, lifo){
                     res.cookie('username',rows[0].name, { maxAge: 900000});
                     res.cookie('userid',rows[0].id, { maxAge: 900000});
                     res.cookie('deedcoin', rows[0].coins, { maxAge: 900000});
+                    res.cookie('trophies', rows[0].badges, { maxAge: 900000});
                     res.json({loggedin:true, message:'Logged in as ' + rows[0].name + ".", name:rows[0].name});
                 }
             })
@@ -97,15 +124,22 @@ module.exports = function(app, sequelize, sequelizeD, lifo){
                 "WHERE id = ?", {replacements:[req.body.deedid], type: sequelize.QueryTypes.UPDATE})
             .then(function(rows) {
                 console.log(rows);
-                console.log("here");
                 sequelize.query("UPDATE users " +
-                    "SET coins=? "+
-                    "WHERE id=? ", {replacements:[req.body.coins, req.body.userid], type: sequelize.QueryTypes.UPDATE})
+                    "SET coins=? " +
+                    "SET badges=?"+
+                    "WHERE id=? ", {replacements:[req.body.coins, req.body.trophy, req.body.userid], type: sequelize.QueryTypes.UPDATE})
                     .then(function(rows) {
                         console.log(rows);
                     });
             });
+
     });
+
+    app.post('/deedsignuptrophy', function(req, res) {
+        if(req.body.trophy != ""){//add trophy in submit
+            lifo.add(new Badge.badgeStruct("/images/tree.png","Tree Hugger","Help Environment"));
+        }
+    })
 
     app.get('/deeds', function(req, res) {
         console.log("deeds route selected...");
@@ -116,8 +150,6 @@ module.exports = function(app, sequelize, sequelizeD, lifo){
                 console.log("find All Results...." + result);
                 res.json(result);
             });
-
-
     });
 // this route adds a new deed event to the database
     app.post('api/deeds/new', function (req, res) {

@@ -36,6 +36,28 @@
         color: rgb(202, 255, 195);
     }
 </style>
+<!--NAV BAR-->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+            <a class="navbar-brand" href="index.html">Social Deeds</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="LeaderBoard.html">Leaderboards</a></li><!--<span class="sr-only">(current)</span>-->
+                <li id="deeds"><a href="deeds.html">Deeds </a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" id="rightNavBar">
+                <li><a href="#login" id="loginFormButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
+                <li><a href="#register" id="registerFormButton" data-toggle="modal" data-target="#registerSecton">Register</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 <div class="container">
 
     <div id="a" class="marquee" style="font-size: 18px;"></div>

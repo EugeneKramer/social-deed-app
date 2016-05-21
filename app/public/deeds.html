@@ -355,7 +355,7 @@
                     '<td>'+ trophy(d.sponsor) +'</td>'+
                     '</tr>'+
                             '<td align="center">' + $("<div/>").append($("<button/>").text("Sign Up").css({margin:"0 auto"}).attr({"onclick":"usersignup('" + d.title +
-                    "'," +d.id + "," + d.deed_coin_val + "," + d.sponsor +")"})).html() + '</td></td>' +
+                    "'," +d.id + "," + d.deed_coin_val + ',"' + d.sponsor +'")'})).html() + '</td></td>' +
                     '</table>'+
                     '</div>';
         }
@@ -370,19 +370,20 @@
         });
 });
 
+    var trophies = {poverty:{url:"/images/poverty.png", name:"Poverty Stopper Trophy",description:"Awarded for alleviating poverty"},
+        education:{url:"/images/education.png",name:"Education Trophy",description:"Awarded for providing public education services"},
+        environment:{url:"/images/tree.png",name:"Tree Hugger Trophy",description:"Awarded for helping preserve and restore the environment"},
+        crisis:{url:"/images/crisis",name:"Crisis Trophy",description:"Awarded for helping people in crisis situations"}};
     function trophy(trophyname){
         if(trophyname == "none") return "None";
-        var trophies = {poverty:"/images/poverty.png",
-                        education:"/images/education.png",
-                        environment:"/images/tree.png",
-                        crisis:"/images/crisis"};
-        return $("<div/>").append($("<img/>").attr({src:trophies[trophyname],
+
+        return $("<div/>").append($("<img/>").attr({src:trophies[trophyname].url,title:trophies[trophyname].name,
             'width':'25px',
             'height':'25px'})).html();
-
     }
 
     function usersignup(title, id, coin, trophy){
+        console.log("here");
         if(!Cookies.get('userid')){
             bootbox.alert("You must be logged in to sign up.");
         }
@@ -393,7 +394,7 @@
             $("#signuptitle").text(title);
             $("#ConfirmSignUp").modal('show');
             Cookies.set('deedcoin', Number(Cookies.get('deedcoin')) + coin);
-            $.post("/deedsignup", {"deedid": id, coins: Cookies.get('deedcoin'), userid: Cookies.get('userid'), trophies:trophy})
+            $.post("/deedsignup", {"deedid": id, coins: Cookies.get('deedcoin'), userid: Cookies.get('userid'), "trophies":Cookies.get("trophies")})
                     .done(function (data) {
                         console.log(data);
                     });
