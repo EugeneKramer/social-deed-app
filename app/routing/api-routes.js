@@ -6,8 +6,8 @@ var Sequelize =require('sequelize');
 var createHash = require('sha.js');
 var crypto = require('crypto'),shasum = crypto.createHash('sha1');//TODO- chagne Sha1 is broken
 var Deeds = require("../model/deeds.js");
-var LIFO = require('./lifo.js');
-var Badge = require('./Badge');
+var LIFO = require('../public/lifo.js');
+var Badge = require('../public/Badge');
 
 
 var salt = "Project 15";

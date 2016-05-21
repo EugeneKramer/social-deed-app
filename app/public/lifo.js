@@ -17,4 +17,5 @@ var LIFO = function (size){
         return this.data;
     }
 }
+
 module.exports = LIFO;
