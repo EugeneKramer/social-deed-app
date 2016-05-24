@@ -18,239 +18,408 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
     <!-- Bootswatch -->
-    <link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">
-    <link rel="stylesheet" href="/Users/Leslie/social_deeds/app/public/index.css" type="text/css">
-    <title>Social Deeds</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <script src="userstatus.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.1/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootbox/4.4.0/bootbox.min.js"></script>
+    <meta name="description" content="Volunteering and a little competition never hurts! With Social Deeds, you can volunteer while collecting DeedCoins and badges.  Be the envy of everyone around you. Do a good deed!">
+    <title>Social Deeds - Volunteering made social.</title>
 
 </head>
+<script>
+
+    function logout(){
+        console.log("Goobye" + Cookies.get('username'));
+        Cookies.remove('username');
+        Cookies.remove('userid');
+        Cookies.remove('deedcoin');
+        Cookies.remove('trophies');
+        location.reload();
+    }
+
+    function updateifLoggedIn() {
+        if(Cookies.get('username') == undefined) return;
+
+        $("#rightNavBar").empty().append($("<li/>")
+                .append($("<a/>").text("Welcome, " + Cookies.get('username') + "(" + Cookies.get("deedcoin") +")")))
+
+                .append($("<li/>")
+                        .append($("<a/>").text("Logout")
+                                .on("click", logout)));
+    }
+
+    $(function(){
+
+        updateifLoggedIn();
+
+        $("#submitLogin").on("click",function(e){
+            if(!$("#loginForm")[0].checkValidity()) return;
+            e.preventDefault();
+            $("#loginFormStatus").text("Logging in.");
+
+            $.post("/login",$("#loginForm").serialize())
+                    .done(function(data){
+                        if(data.loggedin){
+                            console.log(data);
+                            $("#loginFormStatus").text("Login successful. " + data.message);
+                            $("#loginSection").modal('hide');//("hide");
+                            bootbox.alert("Welcome back " + data.name + "!");
+                            //("#WelcomeUserName").text(data.name);//
+                            //$("#WelcomeSection2").modal('show');
+                            updateifLoggedIn();
+                        }
+                        else{
+                            $("#loginFormStatus").text("Login failed. " + data.message);
+                        }
+                    })
+                    .fail(function(data){
+                        $("#loginFormStatus").text("There was a network error. Please try again.");
+                    })
+        });
+
+        $("#submitRegister").on("click", function(e){
+            //alert("here");
+            if(!$("#registerForm")[0].checkValidity()) return;
+            e.preventDefault();
+            //alert("go");
+            $.post("/register",$("#registerForm").serialize())
+                    .done(function(data){
+                        console.log("here");
+                        if(data.registered){
+                            $("#registerFormStatus").text("Registration complete. " + data.message);
+                            $("#registerSection").modal('hide');//("hide");
+                            bootbox.alert("Your account has been been created. Please log in now.");
+                            //$("#AccountCreatedDialog").modal('show');
+                        }
+                        else{
+                            $("#registerFormStatus").text("Registration failed. " + data.message);
+                        }
+                    })
+                    .fail(function(data){
+                        $("#registerFormStatus").text("There was a network error. Please try again.");
+                    })
+        });
+    });
+</script>
 <body>
 <!--NAV BAR-->
 <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Social Deeds</a>
-    </div>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+            <a class="navbar-brand active" href="index.html">Social Deeds</a>
+        </div>
 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Leaderboards <span class="sr-only">(current)</span></a></li>
-        <li id="deeds"><a href="#">Deeds <span class="sr-only">(current)</span></a></li>
-     </ul>
-           <ul class="nav navbar-nav navbar-right">
-        <li><a href="#" id="myProfile" data-toggle='modal'> My Profile</a></li>
-        <li><a href="#" id="loginButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
-        <li><a href="#" id="loginOutButton" data-toggle="modal" data-target="#loginOutSecton">Log Out</a></li>
-      </ul>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li ><a href="LeaderBoard.html">Leaderboards</a></li><!--<span class="sr-only">(current)</span>-->
+                <li id="deeds"><a href="deeds.html">Deeds </a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" id="rightNavBar">
+                <li><a href="#login" id="loginFormButton" data-toggle="modal" data-target="#loginSecton">Log in</a></li>
+                <li><a href="#register" id="registerFormButton" data-toggle="modal" data-target="#registerSecton">Register</a></li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
-
 <div class="container">
-        <br>
-        <br>
-        <h1 align="center" id="home">Social Deeds</h1>
-       
+    <div class="row">
+        <div class="jumbotron">
+            <h1 class="text-center page-header">Social Deeds</h1>
+            <p><b>Volunteering made social. </b>Compete with local volunteers to bring about change! Earn DeedCoins and gain the respect of your peers, all while supporting your local community!</p>
+        </div>
     </div>
- <br>
-<br>
-<br>
- <div id="welcomeCenter" align="center">
-        <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="createButton" data-toggle="modal" data-target="">Create-A-Deed</a>
-        <br>
-        <br>
-     <!--   <a href="#" class="btn btn-primary btn-lg btn-lg" id="findButton" data-toggle="modal" data-target="#findSection">Do-A-Deed</a>-->
-        <br>
-        <br>
-        
+    <div class="row">
+        <div class="text-center col-sm-6 ">
+            <h3>Improve the community</h3>
+            <a href="#" class="btn btn-default btn-lg btn-lg ghost" id="createADeed" data-toggle="modal" data-target="">Create A Deed</a>
+
+        </div>
+        <div class="text-center col-sm-6 ">
+            <h3>Get Involved!</h3>
+            <a href="deeds.html" class="btn btn-default btn-lg btn-lg ghost" id="doADeed">Do A Deed</a>
+
+        </div>
+        <div class="row">
+            <div class="text-center col-sm-6 ">
+                <br/>
+                <table id="top10NewDeeds" class="table-striped table-condensed text-center" style="font-size:18px; margin:0 auto;">
+                    <caption><h3 style="text-align:center" align="center">New Deeds</h3></caption>
+                    <thead style="text-align:center">
+                        <th>Coin</th>
+                        <th style="text-align:center">Titles</th>
+                    </thead>
+                    <tbody style="text-align:left;"></tbody>
+                </table>
+            </div>
+            <div class="text-center col-sm-6 ">
+                <br/>
+                <table id="top10Players" class="table-striped table-condensed text-center" style="font-size:18px; margin:0 auto;">
+                    <caption><h3  style="text-align:center" align="center">Top Volunteers</h3></caption>
+                    <thead >
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>DeedCoins</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
     </div>
+</div>
 
 <!--LOG IN FORM-->
 <div id="loginSection" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" align="center">Log-In</h4>
                 <button type="button" class="close modal-title" class="btn btn-default" align="left" data-dismiss="modal">X</button>
+                <h4 class="modal-title" align="center">Log-In</h4>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="control-label" for="focusedInput">E-mail</label>
-                    <div class="infoOneLine">
-                        <div class="oneLine" style="margin-left:0;">
-                            <input class="form-control" id="focusedInput" type="email" required value="" placeholder="John.Doe@gmail.com">
+                <form id="loginForm" action="login" method="POST">
+                    <div class="form-group">
+                        <div class="infoOneLine">
+                            <div class="oneLine" style="margin-left:0;">
+                                <label class="control-label" for="email">Email:</label>
+                                <input class="form-control" name="email" id="email" type="email" required="true" value="" placeholder="John.Doe@gmail.com">
                             </div>
                             <br>
-                        <div class="oneLine">
-                            <label class="control-label" for="focusedInput">Password:</label>
-                            <input class="form-control" id="focusedInput" type="password" required value="" placeholder="Password">
-                            <br>
-                        </div>
-                       
-                        <div class="modal-footer">
-                    <button type="submit" formnovalidate="" id="enterLogin" class="btn btn-default" align="right">Enter</button>
-                    
-                    
-                    <button type="submit"  id="signUp" class="btn btn-default" align="left">Sign-Up</button>
-                    <br>
-                    <br>
-                    
-                        </div>
+                            <div class="oneLine">
+                                <label class="control-label" for="password">Password:</label>
+                                <input class="form-control" name="password" id="password" type="password" required="true" value="" placeholder="Password">
+                                <br>
+                            </div>
+
+                            <div class="modal-footer">
+                                <span id="loginFormStatus">A</span>
+                                <button type="submit" id="submitLogin" class="btn btn-default" align="right">Submit</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
- <!--SIGN UP FORM-->
- <div id="signUp-form" class="modal fade" role="dialog">
- <div class="modal-dialog">
+
+<div id="registerSection" class="modal fade" role="dialog">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" align="center">Sign-Up</h4>
+                <button type="button" class="close modal-title" class="btn btn-default" align="left" data-dismiss="modal">X</button>
+                <h4 class="modal-title text-center">Register</h4>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="control-label" for="focusedInput">E-mail</label>
-                    <div class="infoOneLine">
-                        <div class="oneLine" style="margin-left:0;">
-                            <input class="form-control" id="focusedInput" type="email" value="" placeholder="John.Doe@gmail.com">
+                <form id="registerForm">
+                    <div class="form-group">
+                        <div class="oneLine">
+                            <label class="control-label" for="user">User Name:</label>
+                            <input class="form-control" name="user" id="user" type="text" required="true" value="" placeholder="John Doe">
+                        </div>
+                            <div class="oneLine" style="margin-left:0;">
+                                <label class="control-label" for="email">Email:</label>
+                                <input class="form-control" name="email" id="email" type="email" required="true" value="" placeholder="John.Doe@gmail.com">
                             </div>
-                            <br>
-
-                        <div class="oneLine">
-                            <label class="control-label" for="focusedInput">Username:</label>
-                            <input class="form-control" id="focusedInput" type="text" value="" placeholder="username">
-                            <br>
-                        </div>
-                        <div class="oneLine">
-                            <label class="control-label" for="focusedInput">Password:</label>
-                            <input class="form-control" id="focusedInput" type="password" value="" placeholder="Password">
-                            <br>
-                        </div>
-                        <div class="oneLine">
-                            <label class="control-label" for="focusedInput">Select An Image For Your Profile:</label><br>
-                            <form action="demo_form.asp">
-                                <input type="file" name="pic" accept="image/*">
-                            </form>
-                        </div>   
-                        <div class="modal-footer">
-                    <button type="submit" id="enterLogin" class="btn btn-default" align="right">Enter</button>
-                    <br>
-                    <br>
-                    <button type="button" class="close" class="btn btn-default" align="center" data-dismiss="modal">X</button>
-                        </div>
-                        </div>
+                            <div class="oneLine">
+                                <label class="control-label" for="password">Password:</label>
+                                <input class="form-control" name="password" id="password" type="password" required="true" value="" placeholder="Password">
+                            </div>
+                            <div class="oneLine">
+                                <label class="control-label" for="about">About: <small>(Optional)</small></label>
+                                <textarea rows="5" cols="40" class="form-control" name="about" id="about" type="text" value="" placeholder="Tell the world about yourself."></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <span id="registerFormStatus"></span>
+                                <button type="submit" id="submitRegister" class="btn btn-default" align="right">Submit</button>
+                            </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-<!--CREATE A DEED FORM-->
 
- <div id="createSection" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-         
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" align="center">Create-A-Deed</h4>
-                </div>
-                <div class="modal-body">
+
+<!--CREATE A DEED FORM-->
+<div class="modal fade" id="createSection2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title text-center">Create-A-Deed</h4>
+            </div>
+            <div class="modal-body">
+
+                <form>
                     <div class="form-group">
-                        <!-- <div class="addEventForm"> -->
-                        <label class="control-label animated fadeInDown" for="focusedInput">Deed Info:</label>
-                        <div class="infoOneLine">
-                            <div class="oneLine" style="margin-left: 0;">
-                                <input class="form-control eventName animated fadeInDown" id="focusedInput" type="text" value="" placeholder="Event Name" required>
-                            </div>
-                            <br>
-                            <div class="oneLine">
-                                <label class="control-label animated fadeInDown" for="focusedInput">Date:</label>
-                                <input class="form-control eventDate animated fadeInDown" id="focusedInput" type="date" value="" placeholder="Date" required>
-                            </div>
-                           <br>
-                            <div class="oneLine">
-                                <label class="control-label animated fadeInDown" for="focusedInput">Time:</label>
-                                <input class="form-control eventTime animated fadeInDown" id="focusedInput" type="time" value="" placeholder="Time" required>
-                            </div>
-                            <br>
-                            <div class="oneLine">
-                            <label class="control-label" for =focusedInput>Location:</label>
-                            <input class="form-control locationDescription" id="focusedInput" type="text" value="" placeholder="Location" required>
-                </div>
-                           
-                        </div>
-                
+                        <label for="deedTitle">Deed Title:</label>
+                        <input type="text" class="form-control" id="deedTitle" aria-describedby="emailHelp" placeholder="Deed Title">
                     </div>
-             <div id="others">
-                   <!-- <label class="control-label" for="focusedInput">What Skillsets do you possess?</label><br> 
-                 <input  id="check" type="checkbox" name="skills" value="skillset1"> IT<br>
-                 <input  id="check" type="checkbox" name="skills" value="skillset2"> Art<br>
-                 <input  id="check" type="checkbox" name="skills" value="skillset3">Management<br>-->
-                 <input  id="option"type="checkbox" name="skills" value="skillset3"> Other<br>
-                 <label  id="other"for="focusedInput">Other:</label>
-                 <input type="text" class="form-control" id="other1">
-             </div>
-                <br>
-                <div class="oneLine">
-                    <label class="control-label" for="focusedInput">Deed Description:</label>
-                   <textarea class="form-control locationDescription" id="focusedInput" type="text" value="" placeholder="Description"></textarea>
-                </div>
-                <br>
-                <div class="oneLine">
-                <label class="control-label" for="focusedInput">Select An Image for you Event</label><br>
-                    <form action="demo_form.asp">
-                    <input type="file" name="pic" accept="image/*">
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" formnovalidate="" id="addEvent" class="btn btn-default animated bounce" align="center">Add-A-Deed</button>
-                    <br>
-                    <br>
-                    <button type="button" class="close" class="btn btn-default" data-dismiss="modal">X</button>
-                </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="dateStart">Date Start:</label>
+                            <input type="date" class="form-control" id="dateStart" placeholder="">
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="dateEnd">Date End:</label>
+                            <input type="date" class="form-control" id="dateEnd" placeholder="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="timeStart"> Time Start:</label>
+                            <input type="time" class="form-control" id="dateStart" placeholder="">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="timeEnd">Time End:</label>
+                            <input type="time" class="form-control" id="dateEnd" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" class="form-control" id="location" aria-describedby="emailHelp" placeholder="Location">
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deedDescription">Deed Description:</label>
+                        <input type="text" class="form-control" id="deedDescription" aria-describedby="emailHelp" placeholder="Please give a description of your deed">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="exampleSelect2">Deed Coins:</label>
+                        <select multiple class="form-control" id="deedCoins">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="exampleSelect2">Slots</label>
+                        <select  multiple class="form-control" id="slots">
+
+                            <option>1</option>
+                            <option >2</option>
+                            <option >3</option>
+                            <option >4</option>
+                            <option >5</option>
+                            <option >6</option>
+                            <option >7</option>
+                            <option >8</option>
+                            <option >9</option>
+                            <option >10</option>
+                            <option >No Limit</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imageUpload">Upload an image for your deed:</label><br>
+                        <label class="custom-file">
+                            <input type="file" id="file" class="custom-file-input">
+                            <span class="custom-file-control"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="deedTitle">Sponsor Name:</label>
+                        <input type="text" class="form-control" id="sponsorName" aria-describedby="sponsor" placeholder="Sponsor Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sponsorImageUpload">Upload a sponsor Image:</label><br>
+                        <label class="custom-file">
+                            <input type="file" id="file" class="custom-file-input">
+                            <span class="custom-file-control"></span>
+                        </label>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="submitNewDeed" class="btn btn-default" align="right">Submit</button>
             </div>
         </div>
     </div>
+</div>
 </body>
 <script type="text/javascript">
-    
-$("#loginButton").click(function() {
-  
-    $("#loginSection").modal('show');
-});
+    $(function(){
+        $.get("/leader10")
+                .done(function(data) {
+                    $("#top10Players").append(data.map(function (player, i) {
+                        console.log(player);
+                        return $("<tr/>").append($("<td/>").text(player.rank))
+                                .append($("<td/>").text(player.name))
+                                .append($("<td/>").text(player.score))
+                    }));
+                });
 
-$("#signUp").click(function(){
-    $('#loginSection').modal('hide');
-    $('#signUp-form').modal('show');
-})
+        $.get("/deed10")
+                .done(function(data) {
+                    console.log(data);
+                    $("#top10NewDeeds").append(data.map(function (deed, i) {
+                        console.log(deed);
+                        return $("<tr/>").append($("<td/>").text(deed.coins))
+                                .append($("<td/>").text(deed.title.slice(0,35)))
 
-$('#homeButton').click(function(){
-    ('#welcomeCenter').show();
-});
-$('#createButton').click(function(){
-    $("#createSection").modal('show');
-    $('#other').hide();
-    $('#other1').hide();
-})
+                    }));
+                });
 
-$('#other1').keypress(function(e){
-    if(e.keyCode==13){
-        console.log("Enter Key was pressed!")
-    }
-})
-$('#option').click(function(){
-    $('#other').show();
-    $('#other1').show();
+        //$('createSection2').bootstrapMaterialDesign();
+    });
 
-})
+    $("#loginFormButton").on("click", function(){
+        $("#loginFormStatus").text("");
+        $("#loginSection").modal('show'); });
+
+
+    $("#registerFormButton").click(function(){
+        $("#registerFormStatus").text();
+        $('#registerSection').modal('show');
+    });
+
+    $("#createADeed").on("click",function(){
+        $("#createSection2").modal("show");
+    });
+
+    $('#homeButton').click(function(){
+        ('#welcomeCenter').show();
+    });
+    $('#createButton').click(function(){
+        $("#createSection").modal('show');
+        $('#other').hide();
+        $('#other1').hide();
+    })
+    $('#other1').keypress(function(e){
+        if(e.keyCode==13){
+            console.log("Enter Key was pressed!")
+        }
+    })
+    $('#option').click(function(){
+        $('#other').show();
+        $('#other1').show();
+    })
+</script>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-78111019-1', 'auto');
+    ga('send', 'pageview');
 
 </script>
 </html>

@@ -1,1 +1,6 @@
-# social-deed-app
+# SocialDeeds
+
+Third party tools
+-Loggly
+-StormPath
+-
